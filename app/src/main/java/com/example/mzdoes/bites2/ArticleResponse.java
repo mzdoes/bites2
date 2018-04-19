@@ -8,12 +8,12 @@ import java.util.List;
  * Created by zeucudatcapua2 on 3/22/18.
  */
 
-public class ArticleList implements Serializable {
+public class ArticleResponse implements Serializable {
 
     private String status; private int totalResults;
     private List<Article> articles;
 
-    public ArticleList() {
+    public ArticleResponse() {
         status = "ok";
         totalResults = 0;
         articles = new ArrayList<>();

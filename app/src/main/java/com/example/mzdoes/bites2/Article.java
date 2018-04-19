@@ -11,11 +11,11 @@ import java.io.Serializable;
 
 public class Article implements Parcelable, Serializable {
 
-    private ShortSource source;
+    private Source source;
     private String author, title, description, url, urlToImage, publishedAt;
 
     public Article() {
-        source = new ShortSource();
+        source = new Source();
         author = "Rick Astley";
         title = "Never Gonna Give You Up";
         description = "A song used to Rick Roll";
@@ -24,10 +24,10 @@ public class Article implements Parcelable, Serializable {
         publishedAt = "YouTube";
     }
 
-    public ShortSource getSource() {
+    public Source getSource() {
         return source;
     }
-    public void setSource(ShortSource source) {
+    public void setSource(Source source) {
         this.source = source;
     }
 
@@ -74,7 +74,7 @@ public class Article implements Parcelable, Serializable {
     }
 
     protected Article(Parcel in) {
-        source = (ShortSource) in.readValue(ShortSource.class.getClassLoader());
+        source = (Source) in.readValue(Source.class.getClassLoader());
     }
 
     @Override

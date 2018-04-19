@@ -6,11 +6,11 @@ import java.io.Serializable;
  * Created by zeucudatcapua2 on 3/22/18.
  */
 
-public class ShortSource implements Serializable {
+public class ArticleSource implements Serializable {
 
     private String id, name;
 
-    public ShortSource() {
+    public ArticleSource() {
         id = "youtube";
         name = "YouTube";
     }

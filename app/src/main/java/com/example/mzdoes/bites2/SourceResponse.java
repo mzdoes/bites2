@@ -8,11 +8,11 @@ import java.util.List;
  * Created by zeucudatcapua2 on 3/22/18.
  */
 
-public class SourceList implements Serializable {
+public class SourceResponse implements Serializable {
     private String status;
-    private List<NewsSource> sources;
+    private List<Source> sources;
 
-    public SourceList() {
+    public SourceResponse() {
         status = "ok";
         sources = new ArrayList<>();
     }
@@ -24,10 +24,10 @@ public class SourceList implements Serializable {
         this.status = status;
     }
 
-    public List<NewsSource> getSourceList() {
+    public List<Source> getSourceList() {
         return sources;
     }
-    public void setSourceList(List<NewsSource> sourceList) {
+    public void setSourceList(List<Source> sourceList) {
         this.sources = sourceList;
     }
 
