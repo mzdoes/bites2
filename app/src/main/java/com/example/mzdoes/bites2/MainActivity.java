@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                     List<Article> toRemove = new ArrayList<>();
                     boolean found = false;
                     for (Article article : articleListResponse) {
-                        for (Source source : sources) { if ((article.getSource().getId().toString()).equals(source.getId().toString())) { found = true; } }
+                        for (Source source : sources) { if ((article.getSource().getId()).equals(source.getId())) { found = true; } }
                         if (!found) { toRemove.add(article); }
                         found = false;
                     }
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
     private void setup() {
         //SET INSTANCE/API VARIABLES
         searchedArticles = bookmarks = new ArrayList<>();
-        sources = new ArrayList<>(); currentTopic = "";
+        sources = new ArrayList<>(); currentTopic = "trump";
         try {
             currentLanguage = Utility.readString(this.getApplicationContext(), "languageSetting");
             currentCountry  = Utility.readString(this.getApplicationContext(), "countrySetting");
