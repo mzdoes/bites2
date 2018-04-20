@@ -1,13 +1,20 @@
 package com.example.mzdoes.bites2;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -22,21 +29,23 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    /**  ANDROID WIDGETS/TOOLS  **/
-    private ViewPager       mPager;
-    private PagerAdapter    mPagerAdapter;
+    /**  MAINACTIVITY INSTANCE VARIABLES  **/
+    //  ANDROID WIDGETS/TOOLS
+    private ViewPager               mPager;
+    private PagerAdapter            mPagerAdapter;
+    private FloatingActionButton    searchButton;
+    private ImageButton             bookmarkListButton, settingsButton;
+
+    //  IMPORTANT INSTANCE VARIABLES
+    private List<Article>           searchedArticles, bookmarks;
+    private List<Source>            sources;
 
 
-    /**  IMPORTANT INSTANCE VARIABLES  **/
-    private List<Article>   searchedArticles, bookmarks;
-    private List<Source>    sources;
+    //  API TOOLS
+    private NewsAPI                 newsAPI;
+    private String                  currentTopic, currentLanguage, currentCountry;
 
-
-    /**  API TOOLS  **/
-    private NewsAPI         newsAPI;
-    private String          currentTopic, currentLanguage, currentCountry;
-
-    /**  FINAL VARIABLES  **/
+    //  FINAL VARIABLES
     public static final String TAG = "MainActivity";
 
 
@@ -108,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
             currentLanguage = ""; currentCountry = "";
         }
 
+
         //SET WIDGETS
         mPager = findViewById(R.id.pager);
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -130,6 +140,11 @@ public class MainActivity extends AppCompatActivity {
         mPager.setAdapter(mPagerAdapter);
         mPager.setPageTransformer(true, new ParallaxPageTransformer());
 
+        searchButton       = findViewById(R.id.floatingActionButton_search);
+        bookmarkListButton = findViewById(R.id.imageButton_bookmarkList);
+        settingsButton     = findViewById(R.id.imageButton_settings);
+        setButtons();
+
 
         //SET API
         Retrofit retrofit = new Retrofit.Builder().baseUrl(NewsAPI.base_Url)
@@ -137,6 +152,50 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         newsAPI = retrofit.create(NewsAPI.class);
         setArticleView();
+    }
+
+    private void setButtons() {
+        // Button to open AlertDialog to search articles
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog searchDialog = new AlertDialog.Builder(MainActivity.this).create();
+                LayoutInflater inflater = (MainActivity.this).getLayoutInflater();
+                View theView = inflater.inflate(R.layout.dialog_search, null);
+                theView.setBackgroundColor(getResources().getColor(R.color.colorDialog));
+                searchDialog.setView(theView);
+                searchDialog.setTitle(null);
+
+                final EditText searchEditText = theView.findViewById(R.id.editText_searchTopic);
+
+                searchDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Search",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                currentTopic = searchEditText.getText().toString();
+                                setArticleView();
+                            }
+                        });
+
+                searchDialog.show();
+            }
+        });
+
+        // Button to open BookmarkActivity
+        bookmarkListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        // Button to open OptionsActivity
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     private void setArticleView() {
@@ -150,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
         mPager.setCurrentItem(0);
     }
 
-    private void bookmarkArticle(Article articleToBookmark) {
+    public void bookmarkArticle(Article articleToBookmark) {
         boolean found = false;
         for (Article article : bookmarks) { if (article.equals(articleToBookmark)) found = true; }
         if (!found) {
