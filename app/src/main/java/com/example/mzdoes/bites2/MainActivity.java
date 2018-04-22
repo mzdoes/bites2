@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton             bookmarkListButton, settingsButton;
 
     //  IMPORTANT INSTANCE VARIABLES
-    private List<Article>           searchedArticles, bookmarks;
+    private ArrayList<Article>           searchedArticles, bookmarks;
     private List<Source>            sources;
 
 
@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, BookmarksActivity.class);
-                i.putParcelableArrayListExtra("bookmarks", (ArrayList<? extends Parcelable>) bookmarks);
+                i.putExtra("bookmarks", bookmarks);
                 startActivity(i);
             }
         });
