@@ -1,14 +1,22 @@
 package com.example.mzdoes.bites2;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**
  * Created by zeucudatcapua2 on 3/22/18.
  */
 
-public class Source implements Serializable {
-    private String id, name, description, url, category,
-                   language, country;
+public class Source implements Parcelable {
+    private String id;
+    private String name;
+    private String description;
+    private String url;
+    private String category;
+    private String language;
+    private String country;
 
     public Source() {
         id = "cnn";
@@ -68,4 +76,44 @@ public class Source implements Serializable {
     public void setCountry(String country) {
         this.country = country;
     }
+
+    protected Source(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        description = in.readString();
+        url = in.readString();
+        category = in.readString();
+        language = in.readString();
+        country = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeString(url);
+        dest.writeString(category);
+        dest.writeString(language);
+        dest.writeString(country);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Source> CREATOR = new Parcelable.Creator<Source>() {
+
+        @Override
+        public Source createFromParcel(Parcel source) {
+            return null;
+        }
+
+        @Override
+        public Source[] newArray(int size) {
+            return new Source[size];
+        }
+    };
 }

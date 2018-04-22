@@ -1,7 +1,9 @@
 package com.example.mzdoes.bites2;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 SourceResponse sourceResponse = response.body();
                 List<Source> sourceListResponse = sourceResponse.getSourceList();
                 if (sourceListResponse == null || sourceListResponse.isEmpty())
-                    { Toast.makeText(MainActivity.this, "No available sources for this language. Please change!", Toast.LENGTH_SHORT).show(); }
+                    { Toast.makeText(MainActivity.this, "No available sources for this language/country combination. Please change!", Toast.LENGTH_SHORT).show(); }
                 else { sources.clear(); sources.addAll(sourceListResponse); }
             }
 
@@ -135,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageScrollStateChanged(int state) {
             }
-        }); //UPDATE FOR ADDING ARTICLES AT END THING!
+        }); //---  UPDATE FOR ADDING ARTICLES AT END THING!  ---
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         mPager.setPageTransformer(true, new ParallaxPageTransformer());
@@ -185,7 +187,9 @@ public class MainActivity extends AppCompatActivity {
         bookmarkListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent i = new Intent(MainActivity.this, BookmarksActivity.class);
+                i.putParcelableArrayListExtra("bookmarks", (ArrayList<? extends Parcelable>) bookmarks);
+                startActivity(i);
             }
         });
 

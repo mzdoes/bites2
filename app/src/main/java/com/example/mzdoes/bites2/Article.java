@@ -99,4 +99,5 @@ public class Article implements Parcelable, Serializable {
             return new Article[size];
         }
     };
+
 }

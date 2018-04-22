@@ -104,12 +104,33 @@ public class ArticleFragment extends Fragment {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = currentArticle.getUrl();
-                if (!url.startsWith("http://") && !url.startsWith("https://"))
-                    url = "http://" + url;
 
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(browserIntent);
+                //---  UPDATE TO ALLOW USER CHOICE FOR DIALOG TO POP UP IN SETTINGS  ---
+                final AlertDialog confirmOpenDialog = new AlertDialog.Builder(getContext()).create();
+                confirmOpenDialog.setTitle("Open in browser?");
+
+                confirmOpenDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String url = currentArticle.getUrl();
+                                if (!url.startsWith("http://") && !url.startsWith("https://"))
+                                    url = "http://" + url;
+
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                startActivity(browserIntent);
+                            }
+                        });
+
+                confirmOpenDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                confirmOpenDialog.dismiss();
+                            }
+                        });
+
+                confirmOpenDialog.show();
             }
         });
 
@@ -117,7 +138,6 @@ public class ArticleFragment extends Fragment {
         headlineView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                headlineView.setBackground(getResources().getDrawable(R.color.colorAccentDark));
                 final AlertDialog confirmBookmarkDialog = new AlertDialog.Builder(getContext()).create();
                 confirmBookmarkDialog.setTitle("Bookmark this article?");
 
@@ -128,7 +148,7 @@ public class ArticleFragment extends Fragment {
                                 ((MainActivity) getActivity()).bookmarkArticle(currentArticle);
                             }
                         });
-                confirmBookmarkDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "Cancel",
+                confirmBookmarkDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -141,8 +161,6 @@ public class ArticleFragment extends Fragment {
                 return false;
             }
         });
-
-//        while (!headlineView.isFocused()) {headlineView.setBackground(getResources().getDrawable(R.color.colorAccent));}
 
         return view;
     }
