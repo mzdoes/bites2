@@ -3,7 +3,6 @@ package com.example.mzdoes.bites2;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton             bookmarkListButton, settingsButton;
 
     //  IMPORTANT INSTANCE VARIABLES
-    private ArrayList<Article>           searchedArticles, bookmarks;
+    private List<Article>           searchedArticles, bookmarks;
     private List<Source>            sources;
 
 
@@ -112,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         searchedArticles = bookmarks = new ArrayList<>();
         sources = new ArrayList<>(); currentTopic = "trump";
         try {
+            bookmarks       = Utility.readList(this.getApplicationContext(), KeySettings.BOOKMARKS_KEY);
             currentLanguage = Utility.readString(this.getApplicationContext(), "languageSetting");
             currentCountry  = Utility.readString(this.getApplicationContext(), "countrySetting");
         } catch (IOException | ClassNotFoundException e) {
@@ -187,8 +187,14 @@ public class MainActivity extends AppCompatActivity {
         bookmarkListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    Utility.saveList(getApplicationContext(), KeySettings.BOOKMARKS_KEY, bookmarks);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 Intent i = new Intent(MainActivity.this, BookmarksActivity.class);
-                i.putExtra("bookmarks", bookmarks);
+                //Toast.makeText(MainActivity.this, "" + bookmarks.toString(), Toast.LENGTH_SHORT).show();
                 startActivity(i);
             }
         });
@@ -215,11 +221,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void bookmarkArticle(Article articleToBookmark) {
         boolean found = false;
-        for (Article article : bookmarks) { if (article.equals(articleToBookmark)) found = true; }
+        for (Article article : bookmarks) { if (articleToBookmark.equals(article)) found = true; break; }
         if (!found) {
             bookmarks.add(articleToBookmark);
             try {
-                Utility.saveList(this.getApplicationContext(), "bookmarks", bookmarks);
+                Utility.saveList(this.getApplicationContext(), KeySettings.BOOKMARKS_KEY, bookmarks);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -256,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         try {
-            Utility.saveList(this.getApplicationContext(), "bookmarks", bookmarks);
+            Utility.saveList(this.getApplicationContext(), KeySettings.BOOKMARKS_KEY, bookmarks);
             Utility.saveString(this.getApplicationContext(), "languageSetting", currentLanguage);
             Utility.saveString(this.getApplicationContext(), "countrySetting", currentCountry);
         } catch (IOException e) {

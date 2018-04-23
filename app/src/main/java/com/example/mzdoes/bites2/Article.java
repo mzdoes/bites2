@@ -100,4 +100,8 @@ public class Article implements Parcelable, Serializable {
         }
     };
 
+    @Override
+    public String toString() {
+        return getTitle();
+    }
 }
