@@ -1,12 +1,14 @@
 package com.example.mzdoes.bites2;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +20,7 @@ public class Utility {
         FileOutputStream fos = context.openFileOutput (key, Context.MODE_PRIVATE);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject (articleList);
+        Log.d("Utility", "saveList: " + articleList.toString());
         oos.close ();
         fos.close ();
     }
@@ -31,10 +34,10 @@ public class Utility {
     }
 
 
-    public static List<Article> readList(Context context, String key) throws IOException, ClassNotFoundException {
+    public static ArrayList<Article> readList(Context context, String key) throws IOException, ClassNotFoundException {
         FileInputStream fis = context.openFileInput (key);
         ObjectInputStream ois = new ObjectInputStream (fis);
-        List<Article> articleList = (List<Article>) ois.readObject();
+        ArrayList<Article> articleList = (ArrayList<Article>) ois.readObject();
         return articleList;
     }
 

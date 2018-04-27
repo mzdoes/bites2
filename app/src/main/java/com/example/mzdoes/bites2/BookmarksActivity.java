@@ -1,6 +1,7 @@
 package com.example.mzdoes.bites2;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -26,7 +28,7 @@ public class BookmarksActivity extends AppCompatActivity {
     private FloatingActionButton    backButton;
     private ImageButton             clearButton, deleteButton;
 
-    private List<Article>           currentBookmarks;
+    private List<Article> currentBookmarks;
 
 
     @Override
@@ -39,15 +41,17 @@ public class BookmarksActivity extends AppCompatActivity {
 
     private void setup() {
         currentBookmarks = new ArrayList<>();
-        try {
-            currentBookmarks = Utility.readList(this.getApplicationContext(), KeySettings.BOOKMARKS_KEY);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            currentBookmarks = Utility.readList(this.getApplicationContext(), KeySettings.BOOKMARKS_KEY);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
 
-        Toast.makeText(this, "" + currentBookmarks.toString(), Toast.LENGTH_SHORT).show();
+        Intent i = getIntent();
+        currentBookmarks = i.getParcelableArrayListExtra(KeySettings.BOOKMARKS_KEY);
+        Log.d("BookmarksActivity", "setup: " + currentBookmarks.size());
 
         // SET WIDGETS
         mPager = findViewById(R.id.pager_bookmarks);

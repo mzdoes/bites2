@@ -112,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
         sources = new ArrayList<>(); currentTopic = "trump";
         try {
             bookmarks       = Utility.readList(this.getApplicationContext(), KeySettings.BOOKMARKS_KEY);
-            currentLanguage = Utility.readString(this.getApplicationContext(), "languageSetting");
-            currentCountry  = Utility.readString(this.getApplicationContext(), "countrySetting");
+//            currentLanguage = Utility.readString(this.getApplicationContext(), "languageSetting");
+//            currentCountry  = Utility.readString(this.getApplicationContext(), "countrySetting");
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             currentLanguage = ""; currentCountry = "";
@@ -122,22 +122,22 @@ public class MainActivity extends AppCompatActivity {
 
         //SET WIDGETS
         mPager = findViewById(R.id.pager);
-        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            boolean lastPageChange = false;
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        }); //---  UPDATE FOR ADDING ARTICLES AT END THING!  ---
+//        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            boolean lastPageChange = false;
+//
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//            @Override
+//            public void onPageSelected(int position) {
+//
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//            }
+//        }); //---  UPDATE FOR ADDING ARTICLES AT END THING!  ---
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         mPager.setPageTransformer(true, new ParallaxPageTransformer());
@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 Intent i = new Intent(MainActivity.this, BookmarksActivity.class);
-                //Toast.makeText(MainActivity.this, "" + bookmarks.toString(), Toast.LENGTH_SHORT).show();
+                i.putParcelableArrayListExtra(KeySettings.BOOKMARKS_KEY, (ArrayList<Article>) bookmarks);
                 startActivity(i);
             }
         });
@@ -221,15 +221,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void bookmarkArticle(Article articleToBookmark) {
         boolean found = false;
-        for (Article article : bookmarks) { if (articleToBookmark.equals(article)) found = true; break; }
+        for (Article article : bookmarks) { if (articleToBookmark.equals(article)) found = true; }
         if (!found) {
             bookmarks.add(articleToBookmark);
             try {
                 Utility.saveList(this.getApplicationContext(), KeySettings.BOOKMARKS_KEY, bookmarks);
+                Toast.makeText(this, "Bookmarked article!", Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else { Toast.makeText(this, "This article has already been saved", Toast.LENGTH_SHORT).show(); }
+        } else { Toast.makeText(this, "Article already bookmarked.", Toast.LENGTH_SHORT).show(); }
     }
 
 

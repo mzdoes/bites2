@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -17,7 +16,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -34,7 +32,7 @@ public class ArticleFragment extends Fragment {
 
     private static final String URL_BLACK_IMAGE = "https://vignette.wikia.nocookie.net/joke-battles/images/5/5a/Black.jpg/revision/latest?cb=20161223050425";
     private Article currentArticle;
-    private String headline, description;
+    private String headline, description, urlImage;
     private TextView headlineView;
 
     // Required empty public constructor
@@ -55,9 +53,12 @@ public class ArticleFragment extends Fragment {
         while (this.getContext() == null) { Log.d("ArticleFragment", "setup: WAITING FOR FRAGMENT CONTEXT"); }
 
         // For the background ImageView
-        String urlImage = currentArticle.getUrlToImage();
-        if (!(urlImage == null || (urlImage.isEmpty()))) {
-            Picasso.with(getContext()).load(urlImage).resize(container.getWidth(), container.getHeight()).centerCrop().into(new Target() {
+        if (!(urlImage.isEmpty())) {
+            Picasso.with(getContext())
+                    .load(urlImage)
+                    .resize(view.getWidth(), view.getHeight())
+                    .centerCrop()
+                    .into(new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                     BitmapDrawable drawable = new BitmapDrawable(getContext().getResources(), bitmap);
@@ -170,6 +171,7 @@ public class ArticleFragment extends Fragment {
         ArticleFragment fragment = new ArticleFragment();
         Bundle args = new Bundle();
         args.putParcelable("currentArticle", article);
+        args.putString("urlToImage", article.getUrlToImage());
         args.putString(    "descString",     "BY "+ article.getSource().getName() + ": " + article.getDescription());
         fragment.setArguments(args);
         return fragment;
@@ -180,10 +182,10 @@ public class ArticleFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         currentArticle = getArguments().getParcelable("currentArticle");
+        urlImage = getArguments().getString("urlToImage");
         description = getArguments().getString("descString");
         headline = currentArticle.getTitle();
 
-        Log.d("ArticleFragment", "onCreate: " + description);
     }
 
 

@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.example.mzdoes.bites2"
         minSdkVersion 19
@@ -32,7 +32,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:2.3.0"
 
     //url to img
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 
 
     testImplementation 'junit:junit:4.12'
