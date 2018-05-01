@@ -23,6 +23,12 @@ public class Utility {
         Log.d("Utility", "saveList: " + articleList.toString());
         oos.close ();
         fos.close ();
+
+        try {
+            Log.d("Utility", "saveList: " + Utility.readList(context, key));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void saveString(Context context, String key, String toSave) throws IOException {

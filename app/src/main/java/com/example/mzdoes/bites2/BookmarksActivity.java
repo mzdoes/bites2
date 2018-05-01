@@ -11,7 +11,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -28,8 +27,7 @@ public class BookmarksActivity extends AppCompatActivity {
     private FloatingActionButton    backButton;
     private ImageButton             clearButton, deleteButton;
 
-    private List<Article> currentBookmarks;
-
+    private List<Article> currentBookmarks, toRemove;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +38,7 @@ public class BookmarksActivity extends AppCompatActivity {
     }
 
     private void setup() {
-        currentBookmarks = new ArrayList<>();
+        currentBookmarks = toRemove = new ArrayList<>();
 //        try {
 //            currentBookmarks = Utility.readList(this.getApplicationContext(), KeySettings.BOOKMARKS_KEY);
 //        } catch (IOException e) {
@@ -51,7 +49,6 @@ public class BookmarksActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         currentBookmarks = i.getParcelableArrayListExtra(KeySettings.BOOKMARKS_KEY);
-        Log.d("BookmarksActivity", "setup: " + currentBookmarks.size());
 
         // SET WIDGETS
         mPager = findViewById(R.id.pager_bookmarks);
@@ -75,6 +72,7 @@ public class BookmarksActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+                save();
                 finish();
             }
         });
@@ -97,6 +95,9 @@ public class BookmarksActivity extends AppCompatActivity {
                                 }
 
                                 Toast.makeText(BookmarksActivity.this, "Cleared bookmarks.", Toast.LENGTH_SHORT).show();
+
+                                Intent intent = new Intent(BookmarksActivity.this, MainActivity.class);
+                                setResult(RESULT_OK, intent);
                                 finish();
                             }
                         });
@@ -123,9 +124,10 @@ public class BookmarksActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                toRemove.add(currentBookmarks.get(mPager.getCurrentItem()));
                                 currentBookmarks.remove(mPager.getCurrentItem());
                                 Toast.makeText(BookmarksActivity.this, "Deleted bookmark.", Toast.LENGTH_SHORT).show();
-                                updateWidgets();
+                                updateWidgets(mPager.getCurrentItem());
                             }
                         });
 
@@ -142,9 +144,10 @@ public class BookmarksActivity extends AppCompatActivity {
         });
     }
 
-    private void updateWidgets() {
+    private void updateWidgets(int pos) {
         mPagerAdapter.notifyDataSetChanged();
-        mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        if (pos == 0) { mPager.setCurrentItem(1);}
+        else { mPager.setCurrentItem(mPager.getCurrentItem() - 1); }
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
@@ -163,6 +166,19 @@ public class BookmarksActivity extends AppCompatActivity {
         }
     }
 
+    private void save() {
+        try {
+            Utility.saveList(getApplicationContext(), "bookmarks", currentBookmarks);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Intent intent = new Intent(BookmarksActivity.this, MainActivity.class);
+        intent.putParcelableArrayListExtra("toRemove", (ArrayList<Article>) toRemove);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -171,5 +187,12 @@ public class BookmarksActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        save();
     }
 }

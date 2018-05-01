@@ -3,7 +3,9 @@ package com.example.mzdoes.bites2;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Source implements Parcelable {
+import java.io.Serializable;
+
+public class Source implements Parcelable, Serializable {
     private String id;
     private String name;
     private String description;

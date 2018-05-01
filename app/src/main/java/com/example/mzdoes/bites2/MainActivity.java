@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     //  FINAL VARIABLES
     public static final String TAG = "MainActivity";
-
+    public static final int    BOOKMARKS_REQUEST = 10;
 
     //---  METHODS AND STUFF  ----
 
@@ -92,7 +92,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                     articleListResponse.remove(toRemove);
                     searchedArticles.clear(); searchedArticles.addAll(articleListResponse);
-                    updateWidgets();
+
+                    if (response.isSuccessful()) { updateWidgets(); }
+
                 }
             }
 
@@ -119,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
             currentLanguage = ""; currentCountry = "";
         }
 
+        Log.d(TAG, "setup: " + bookmarks.toString());
 
         //SET WIDGETS
         mPager = findViewById(R.id.pager);
@@ -192,10 +195,9 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
                 Intent i = new Intent(MainActivity.this, BookmarksActivity.class);
                 i.putParcelableArrayListExtra(KeySettings.BOOKMARKS_KEY, (ArrayList<Article>) bookmarks);
-                startActivity(i);
+                startActivityForResult(i, BOOKMARKS_REQUEST);
             }
         });
 
@@ -264,10 +266,27 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         try {
             Utility.saveList(this.getApplicationContext(), KeySettings.BOOKMARKS_KEY, bookmarks);
-            Utility.saveString(this.getApplicationContext(), "languageSetting", currentLanguage);
-            Utility.saveString(this.getApplicationContext(), "countrySetting", currentCountry);
+//            Utility.saveString(this.getApplicationContext(), "languageSetting", currentLanguage);
+//            Utility.saveString(this.getApplicationContext(), "countrySetting", currentCountry);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == BOOKMARKS_REQUEST) {
+            //clear the local bookmark list and resume with saved bookmarks
+            bookmarks.clear();
+            try {
+                bookmarks = Utility.readList(getApplicationContext(), "bookmarks");
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else if (resultCode == RESULT_FIRST_USER && requestCode == BOOKMARKS_REQUEST) {
+            bookmarks.removeAll(data.getParcelableArrayListExtra("toRemove"));
         }
     }
 }

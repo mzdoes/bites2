@@ -56,8 +56,8 @@ public class ArticleFragment extends Fragment {
         if (!(urlImage.isEmpty())) {
             Picasso.with(getContext())
                     .load(urlImage)
-                    .resize(view.getWidth(), view.getHeight())
-                    .centerCrop()
+//                    .resize(view.getWidth(), view.getHeight())
+//                    .centerCrop()
                     .into(new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
