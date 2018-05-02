@@ -190,14 +190,18 @@ public class MainActivity extends AppCompatActivity {
         bookmarkListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    Utility.saveList(getApplicationContext(), KeySettings.BOOKMARKS_KEY, bookmarks);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (bookmarks.isEmpty() || bookmarks == null) {
+                    Toast.makeText(MainActivity.this, "Empty bookmarks list.", Toast.LENGTH_SHORT).show();
+                } else {
+                    try {
+                        Utility.saveList(getApplicationContext(), KeySettings.BOOKMARKS_KEY, bookmarks);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Intent i = new Intent(MainActivity.this, BookmarksActivity.class);
+                    i.putParcelableArrayListExtra(KeySettings.BOOKMARKS_KEY, (ArrayList<Article>) bookmarks);
+                    startActivityForResult(i, BOOKMARKS_REQUEST);
                 }
-                Intent i = new Intent(MainActivity.this, BookmarksActivity.class);
-                i.putParcelableArrayListExtra(KeySettings.BOOKMARKS_KEY, (ArrayList<Article>) bookmarks);
-                startActivityForResult(i, BOOKMARKS_REQUEST);
             }
         });
 

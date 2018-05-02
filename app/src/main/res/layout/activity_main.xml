@@ -19,8 +19,8 @@
         android:focusable="true"
         app:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_mainLeft"
-        app:layout_constraintStart_toStartOf="@+id/guideline_mainRight"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_mainRight"
+        app:layout_constraintStart_toStartOf="@+id/guideline_mainLeft"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.9"
         app:srcCompat="@drawable/ic_search_black_24dp" />
@@ -45,7 +45,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton_search"
         app:layout_constraintEnd_toStartOf="@+id/floatingActionButton_search"
         app:layout_constraintHorizontal_bias="0.92"
-        app:layout_constraintStart_toStartOf="@+id/guideline_mainRight"
+        app:layout_constraintStart_toStartOf="@+id/guideline_mainLeft"
         app:layout_constraintTop_toTopOf="@+id/floatingActionButton_search"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/ic_collections_bookmark_black_24dp" />
@@ -57,7 +57,7 @@
         android:background="@android:color/transparent"
         android:tint="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton_search"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_mainLeft"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_mainRight"
         app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toEndOf="@+id/floatingActionButton_search"
         app:layout_constraintTop_toTopOf="@+id/floatingActionButton_search"
@@ -69,9 +69,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline_mainTop"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_mainLeft"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline_mainRight"
+        app:layout_constraintEnd_toEndOf="@id/guideline_mainRight"
+        app:layout_constraintStart_toStartOf="@+id/guideline_mainLeft"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@color/colorAccent" />
@@ -81,7 +80,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_mainRight"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_mainLeft"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@color/colorAccent" />
@@ -92,7 +91,7 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline_mainLeft"
+        app:layout_constraintStart_toStartOf="@+id/guideline_mainRight"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@color/colorAccent" />
 
@@ -101,21 +100,21 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_mainLeft"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_mainRight"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline_mainRight"
+        app:layout_constraintStart_toStartOf="@+id/guideline_mainLeft"
         app:layout_constraintTop_toBottomOf="@id/guideline_mainBottom"
         app:srcCompat="@color/colorAccent" />
 
     <android.support.constraint.Guideline
-        android:id="@+id/guideline_mainLeft"
+        android:id="@+id/guideline_mainRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_end="8dp" />
 
     <android.support.constraint.Guideline
-        android:id="@+id/guideline_mainRight"
+        android:id="@+id/guideline_mainLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"

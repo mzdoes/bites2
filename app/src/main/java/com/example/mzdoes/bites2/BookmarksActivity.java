@@ -72,7 +72,7 @@ public class BookmarksActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                save();
+                updateBookmarksAndEnd();
                 finish();
             }
         });
@@ -88,17 +88,9 @@ public class BookmarksActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 currentBookmarks.clear();
-                                try {
-                                    Utility.saveList(getApplicationContext(), "bookmarks", currentBookmarks);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
                                 Toast.makeText(BookmarksActivity.this, "Cleared bookmarks.", Toast.LENGTH_SHORT).show();
-
-                                Intent intent = new Intent(BookmarksActivity.this, MainActivity.class);
-                                setResult(RESULT_OK, intent);
-                                finish();
+                                
+                                updateBookmarksAndEnd();
                             }
                         });
 
@@ -124,10 +116,16 @@ public class BookmarksActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                toRemove.add(currentBookmarks.get(mPager.getCurrentItem()));
-                                currentBookmarks.remove(mPager.getCurrentItem());
-                                Toast.makeText(BookmarksActivity.this, "Deleted bookmark.", Toast.LENGTH_SHORT).show();
-                                updateWidgets(mPager.getCurrentItem());
+                                if (currentBookmarks.size() == 1) {
+                                    currentBookmarks.clear();
+                                    Toast.makeText(BookmarksActivity.this, "Deleted bookmark.", Toast.LENGTH_SHORT).show();
+                                    updateBookmarksAndEnd();
+                                } else {
+                                    toRemove.add(currentBookmarks.get(mPager.getCurrentItem()));
+                                    currentBookmarks.remove(mPager.getCurrentItem());
+                                    Toast.makeText(BookmarksActivity.this, "Deleted bookmark.", Toast.LENGTH_SHORT).show();
+                                    updateWidgets(mPager.getCurrentItem());
+                                }
                             }
                         });
 
@@ -147,7 +145,7 @@ public class BookmarksActivity extends AppCompatActivity {
     private void updateWidgets(int pos) {
         mPagerAdapter.notifyDataSetChanged();
         if (pos == 0) { mPager.setCurrentItem(1);}
-        else { mPager.setCurrentItem(mPager.getCurrentItem() - 1); }
+        else { mPager.setCurrentItem(pos - 1); }
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
@@ -157,7 +155,7 @@ public class BookmarksActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return ArticleFragment.newInstance(currentBookmarks.get(position));
+            return BookmarkFragment.newInstance(currentBookmarks.get(position));
         }
 
         @Override
@@ -166,7 +164,7 @@ public class BookmarksActivity extends AppCompatActivity {
         }
     }
 
-    private void save() {
+    private void updateBookmarksAndEnd() {
         try {
             Utility.saveList(getApplicationContext(), "bookmarks", currentBookmarks);
         } catch (IOException e) {
@@ -176,6 +174,7 @@ public class BookmarksActivity extends AppCompatActivity {
         Intent intent = new Intent(BookmarksActivity.this, MainActivity.class);
         intent.putParcelableArrayListExtra("toRemove", (ArrayList<Article>) toRemove);
         setResult(RESULT_OK, intent);
+        
         finish();
     }
 
@@ -193,6 +192,6 @@ public class BookmarksActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        save();
+        updateBookmarksAndEnd();
     }
 }

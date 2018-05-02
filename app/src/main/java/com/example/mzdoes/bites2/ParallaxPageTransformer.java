@@ -13,6 +13,10 @@ public class ParallaxPageTransformer implements ViewPager.PageTransformer {
 
         int pageWidth = view.getWidth();
         ImageView imageView = view.findViewById(R.id.imageView_articleFragmentBackground);
+        if (imageView == null) {
+            imageView = view.findViewById(R.id.imageView_bookmarkFragmentBackground);
+        }
+
 
         if (position < -1) { // [-Infinity,-1)
             // This page is way off-screen to the left.

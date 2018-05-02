@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.mzdoes.bites2.ArticleFragment">
+    tools:context="com.example.mzdoes.bites2.BookmarkFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
     <ImageView
-        android:id="@+id/imageView_articleFragmentBackground"
+        android:id="@+id/imageView_bookmarkFragmentBackground"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@color/colorBackground"
@@ -20,27 +20,27 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <TextView
-        android:id="@+id/textView_headline"
+        android:id="@+id/textView_bookmarkHeadline"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:background="@color/colorAccent"
+        android:background="@color/colorSecondary"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:textColor="@android:color/background_light"
+        android:textColor="@android:color/black"
         android:textStyle="bold|italic"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_articleRight"
-        app:layout_constraintStart_toStartOf="@+id/guideline_articleLeft"
-        app:layout_constraintTop_toTopOf="@+id/imageView_articleFragmentBackground"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_bookmarkFragmentRight"
+        app:layout_constraintStart_toStartOf="@+id/guideline_bookmarkFragmentLeft"
+        app:layout_constraintTop_toTopOf="@+id/imageView_bookmarkFragmentBackground"
         app:layout_constraintVertical_bias="0.35000002"
         tools:text="Trump did something, again." />
 
     <TextView
-        android:id="@+id/textView_description"
+        android:id="@+id/textView_bookmarkDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -51,23 +51,24 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_articleRight"
-        app:layout_constraintStart_toStartOf="@+id/guideline_articleLeft"
-        app:layout_constraintTop_toBottomOf="@+id/textView_headline"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_bookmarkFragmentRight"
+        app:layout_constraintStart_toStartOf="@+id/guideline_bookmarkFragmentLeft"
+        app:layout_constraintTop_toBottomOf="@+id/textView_bookmarkHeadline"
         app:layout_constraintVertical_bias="0.060000002"
         tools:text="@android:string/paste_as_plain_text" />
 
     <android.support.constraint.Guideline
-        android:id="@+id/guideline_articleLeft"
+        android:id="@+id/guideline_bookmarkFragmentLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="16dp" />
 
     <android.support.constraint.Guideline
-        android:id="@+id/guideline_articleRight"
+        android:id="@+id/guideline_bookmarkFragmentRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_end="16dp" />
 </android.support.constraint.ConstraintLayout>
+

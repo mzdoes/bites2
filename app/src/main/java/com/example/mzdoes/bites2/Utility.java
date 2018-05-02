@@ -20,15 +20,8 @@ public class Utility {
         FileOutputStream fos = context.openFileOutput (key, Context.MODE_PRIVATE);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject (articleList);
-        Log.d("Utility", "saveList: " + articleList.toString());
         oos.close ();
         fos.close ();
-
-        try {
-            Log.d("Utility", "saveList: " + Utility.readList(context, key));
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     public static void saveString(Context context, String key, String toSave) throws IOException {
