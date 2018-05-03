@@ -49,11 +49,11 @@ public class MainActivity extends AppCompatActivity {
     //  FINAL VARIABLES
     public static final String TAG = "MainActivity";
     public static final int    BOOKMARKS_REQUEST = 10;
+    public static final int    SETTINGS_REQUEST  = 20;
 
-    //---  METHODS AND STUFF  ----
 
-
-    /**  API METHODS  **/
+    /** ---  METHODS AND STUFF  ---- **/
+    // API METHODS
     private void setSources(String currentLanguage) {
         Call<SourceResponse> sourceResponseCall = newsAPI.getSourceList(currentLanguage, KeySettings.API_KEY);
         sourceResponseCall.enqueue(new Callback<SourceResponse>() {
@@ -106,16 +106,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    /**  APP WIDGETS & TOOLS METHODS  **/
+    // APP WIDGETS & TOOLS METHODS
     private void setup() {
         //SET INSTANCE/API VARIABLES
         searchedArticles = bookmarks = new ArrayList<>();
         sources = new ArrayList<>(); currentTopic = "trump";
         try {
             bookmarks       = Utility.readList(this.getApplicationContext(), KeySettings.BOOKMARKS_KEY);
-//            currentLanguage = Utility.readString(this.getApplicationContext(), "languageSetting");
-//            currentCountry  = Utility.readString(this.getApplicationContext(), "countrySetting");
+            currentLanguage = Utility.readString(this.getApplicationContext(), "languageSetting");
+            currentCountry  = Utility.readString(this.getApplicationContext(), "countrySetting");
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             currentLanguage = ""; currentCountry = "";
@@ -200,7 +199,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                     Intent i = new Intent(MainActivity.this, BookmarksActivity.class);
                     i.putParcelableArrayListExtra(KeySettings.BOOKMARKS_KEY, (ArrayList<Article>) bookmarks);
+
                     startActivityForResult(i, BOOKMARKS_REQUEST);
+                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 }
             }
         });
@@ -209,7 +210,9 @@ public class MainActivity extends AppCompatActivity {
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent i = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivityForResult(i, SETTINGS_REQUEST);
+                overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
         });
     }
@@ -240,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /**  MISCELLANEOUS  **/
+    // MISCELLANEOUS
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -291,6 +294,17 @@ public class MainActivity extends AppCompatActivity {
             }
         } else if (resultCode == RESULT_FIRST_USER && requestCode == BOOKMARKS_REQUEST) {
             bookmarks.removeAll(data.getParcelableArrayListExtra("toRemove"));
+        } else if (resultCode == RESULT_OK && requestCode == SETTINGS_REQUEST) {
+            try {
+                currentLanguage = Utility.readString(getApplicationContext(), KeySettings.LANGUAGE_KEY);
+                currentCountry  = Utility.readString(getApplicationContext(), KeySettings.COUNTRY_KEY);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            setArticleView();
         }
     }
 }

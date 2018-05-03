@@ -30,7 +30,7 @@
         android:background="@color/colorSecondary"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/background_light"
         android:textStyle="bold|italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline_bookmarkFragmentRight"

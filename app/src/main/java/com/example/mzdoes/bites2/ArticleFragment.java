@@ -5,11 +5,8 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 
 /**
@@ -53,11 +49,8 @@ public class ArticleFragment extends Fragment {
         while (this.getContext() == null) { Log.d("ArticleFragment", "setup: WAITING FOR FRAGMENT CONTEXT"); }
 
         // For the background ImageView
-        if (!(urlImage.isEmpty())) {
-            Picasso.with(getContext()).load(urlImage).fit().centerCrop().into(background);
-        } else {
-            Picasso.with(getContext()).load(URL_BLACK_IMAGE).fit().centerCrop().into(background);
-        }
+        if (!(urlImage == null || urlImage.isEmpty())) { Picasso.with(getContext()).load(urlImage).fit().centerCrop().into(background); }
+        else { Picasso.with(getContext()).load(URL_BLACK_IMAGE).fit().centerCrop().into(background); }
 
         background.setColorFilter(Color.rgb(123, 123, 123), PorterDuff.Mode.MULTIPLY);
 

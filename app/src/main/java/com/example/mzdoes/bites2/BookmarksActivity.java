@@ -73,7 +73,6 @@ public class BookmarksActivity extends AppCompatActivity {
                 }
 
                 updateBookmarksAndEnd();
-                finish();
             }
         });
 
@@ -174,8 +173,8 @@ public class BookmarksActivity extends AppCompatActivity {
         Intent intent = new Intent(BookmarksActivity.this, MainActivity.class);
         intent.putParcelableArrayListExtra("toRemove", (ArrayList<Article>) toRemove);
         setResult(RESULT_OK, intent);
-        
         finish();
+        overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
     }
 
     @Override
