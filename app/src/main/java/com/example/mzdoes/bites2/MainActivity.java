@@ -37,32 +37,34 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton    searchButton;
     private ImageButton             bookmarkListButton, settingsButton;
 
+
     //  IMPORTANT INSTANCE VARIABLES
     private List<Article>           searchedArticles, bookmarks;
     private List<Source>            sources;
-
+    private int                     articleRefreshState;
 
     //  API TOOLS
     private NewsAPI                 newsAPI;
     private String                  currentTopic, currentLanguage, currentCountry;
 
+
     //  FINAL VARIABLES
     public static final String TAG = "MainActivity";
     public static final int    BOOKMARKS_REQUEST = 10;
-    public static final int    SETTINGS_REQUEST  = 20;
-
+    public static final int    SETTINGS_REQUEST  = 25;
+    public static final int    DEFAULT_ARTICLENUM_LOAD = 20;
 
     /** ---  METHODS AND STUFF  ---- **/
     // API METHODS
-    private void setSources(String currentLanguage) {
-        Call<SourceResponse> sourceResponseCall = newsAPI.getSourceList(currentLanguage, KeySettings.API_KEY);
+    private void setSources(String currentLanguage, String currentCountry) {
+        Call<SourceResponse> sourceResponseCall = newsAPI.getSourceList(currentLanguage, currentCountry, KeySettings.API_KEY);
         sourceResponseCall.enqueue(new Callback<SourceResponse>() {
             @Override
             public void onResponse(Call<SourceResponse> call, Response<SourceResponse> response) {
                 SourceResponse sourceResponse = response.body();
                 List<Source> sourceListResponse = sourceResponse.getSourceList();
                 if (sourceListResponse == null || sourceListResponse.isEmpty())
-                    { Toast.makeText(MainActivity.this, "No available sources for this language/country combination. Please change!", Toast.LENGTH_SHORT).show(); }
+                    { Toast.makeText(MainActivity.this, "No available sources for this language combination. Please change!", Toast.LENGTH_SHORT).show(); }
                 else { sources.clear(); sources.addAll(sourceListResponse); }
             }
 
@@ -73,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setSearchedArticles(String currentTopic, String currentCountry) {
-        Call<ArticleResponse> articleResponseCall = newsAPI.getArticleList(currentTopic, currentCountry, 20, KeySettings.API_KEY);
+    private void setSearchedArticles(String currentTopic) {
+        Call<ArticleResponse> articleResponseCall = newsAPI.getArticleList(currentTopic, DEFAULT_ARTICLENUM_LOAD + (articleRefreshState * 10), KeySettings.API_KEY);
         articleResponseCall.enqueue(new Callback<ArticleResponse>() {
             @Override
             public void onResponse(Call<ArticleResponse> call, Response<ArticleResponse> response) {
@@ -109,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
     // APP WIDGETS & TOOLS METHODS
     private void setup() {
         //SET INSTANCE/API VARIABLES
+        articleRefreshState = 0;
         searchedArticles = bookmarks = new ArrayList<>();
         sources = new ArrayList<>(); currentTopic = "trump";
         try {
@@ -124,22 +127,55 @@ public class MainActivity extends AppCompatActivity {
 
         //SET WIDGETS
         mPager = findViewById(R.id.pager);
-//        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            boolean lastPageChange = false;
-//
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//
-//            }
-//            @Override
-//            public void onPageSelected(int position) {
-//
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//            }
-//        }); //---  UPDATE FOR ADDING ARTICLES AT END THING!  ---
+        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            boolean lastPageChange = false;
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                int lastIdx = mPagerAdapter.getCount() - 1;
+
+                int curItem = mPager.getCurrentItem();
+                if (curItem == lastIdx && state == 1) {
+                    lastPageChange = true;
+
+                    if (articleRefreshState != 8) {
+                        final AlertDialog refreshDialog = new AlertDialog.Builder(MainActivity.this).create();
+                        refreshDialog.setTitle("Refresh for more articles?");
+
+                        refreshDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        articleRefreshState += 1;
+                                        setArticleView();
+                                    }
+                                });
+                        refreshDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        refreshDialog.dismiss();
+                                    }
+                                });
+
+                        refreshDialog.show();
+                    } else {
+                        Toast.makeText(MainActivity.this, "Cannot load any more articles!", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    lastPageChange = false;
+                }
+            }
+        }); //---  UPDATE FOR ADDING ARTICLES AT END THING!  ---
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         mPager.setPageTransformer(true, new ParallaxPageTransformer());
@@ -177,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 currentTopic = searchEditText.getText().toString();
+                                articleRefreshState = 0;
                                 setArticleView();
                             }
                         });
@@ -218,14 +255,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setArticleView() {
-        setSources(currentLanguage);
+        setSources(currentLanguage, currentCountry);
         while (sources == null) { Log.d(TAG, "setArticleView: WAITING FOR SOURCES"); }
-        setSearchedArticles(currentTopic, currentCountry);
+        setSearchedArticles(currentTopic);
     }
 
     private void updateWidgets() {
         mPagerAdapter.notifyDataSetChanged();
-        mPager.setCurrentItem(0);
+        if (articleRefreshState == 0) { mPager.setCurrentItem(0); }
     }
 
     public void bookmarkArticle(Article articleToBookmark) {
@@ -273,8 +310,8 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         try {
             Utility.saveList(this.getApplicationContext(), KeySettings.BOOKMARKS_KEY, bookmarks);
-//            Utility.saveString(this.getApplicationContext(), "languageSetting", currentLanguage);
-//            Utility.saveString(this.getApplicationContext(), "countrySetting", currentCountry);
+            Utility.saveString(this.getApplicationContext(), "languageSetting", currentLanguage);
+            Utility.saveString(this.getApplicationContext(), "countrySetting", currentCountry);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -304,6 +341,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
+            articleRefreshState = 0;
             setArticleView();
         }
     }

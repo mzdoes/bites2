@@ -39,13 +39,6 @@ public class BookmarksActivity extends AppCompatActivity {
 
     private void setup() {
         currentBookmarks = toRemove = new ArrayList<>();
-//        try {
-//            currentBookmarks = Utility.readList(this.getApplicationContext(), KeySettings.BOOKMARKS_KEY);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
 
         Intent i = getIntent();
         currentBookmarks = i.getParcelableArrayListExtra(KeySettings.BOOKMARKS_KEY);

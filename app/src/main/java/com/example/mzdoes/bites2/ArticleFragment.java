@@ -28,7 +28,7 @@ public class ArticleFragment extends Fragment {
 
     private static final String URL_BLACK_IMAGE = "https://vignette.wikia.nocookie.net/joke-battles/images/5/5a/Black.jpg/revision/latest?cb=20161223050425";
     private Article currentArticle;
-    private String headline, description, urlImage;
+    private String headline, description, urlImage, sourceUrlImage;
     private TextView headlineView;
 
     // Required empty public constructor
@@ -42,6 +42,7 @@ public class ArticleFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_article, container, false);
         final ImageView background = view.findViewById(R.id.imageView_articleFragmentBackground);
+        final ImageView sourceImg  = view.findViewById(R.id.imageView_source);
         headlineView      = view.findViewById(R.id.textView_headline);
         TextView descriptionView   = view.findViewById(R.id.textView_description);
 
@@ -53,6 +54,11 @@ public class ArticleFragment extends Fragment {
         else { Picasso.with(getContext()).load(URL_BLACK_IMAGE).fit().centerCrop().into(background); }
 
         background.setColorFilter(Color.rgb(123, 123, 123), PorterDuff.Mode.MULTIPLY);
+
+        // For the source ImageView
+        if (!(sourceUrlImage == null || sourceUrlImage.isEmpty())) { Picasso.with(getContext()).load(sourceUrlImage).fit().centerCrop().into(sourceImg); }
+        else { Picasso.with(getContext()).load(URL_BLACK_IMAGE).fit().centerCrop().into(sourceImg); }
+
 
         // Set other widgets
         headlineView.setText(headline); descriptionView.setText(description);
@@ -142,7 +148,9 @@ public class ArticleFragment extends Fragment {
         urlImage = getArguments().getString("urlToImage");
         description = getArguments().getString("descString");
         headline = currentArticle.getTitle();
+        sourceUrlImage = "logo.clearbit.com/" + currentArticle.getSource().getUrl();
 
+        Log.d("ArticleFragment", "onCreate: " + sourceUrlImage);
     }
 
 
