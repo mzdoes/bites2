@@ -2,13 +2,16 @@ package com.example.mzdoes.bites2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -82,6 +85,8 @@ public class SettingsActivity extends AppCompatActivity {
 
                 Intent i = new Intent(SettingsActivity.this, MainActivity.class);
                 setResult(RESULT_OK, i);
+                i.putExtra(KeySettings.LANGUAGE_KEY, chosenLanguage);
+                i.putExtra(KeySettings.COUNTRY_KEY, chosenCountry);
                 overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
                 finish();
             }

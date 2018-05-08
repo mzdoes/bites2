@@ -31,8 +31,10 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
     </android.support.v4.view.ViewPager>
 
@@ -106,6 +108,22 @@
         app:layout_constraintTop_toBottomOf="@id/guideline_mainBottom"
         app:srcCompat="@color/colorAccent" />
 
+    <TextView
+        android:id="@+id/textView_totalBites"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Notification.Info"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_mainBottom"
+        app:layout_constraintEnd_toStartOf="@+id/textView_bitesLogo"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline_mainLeft"
+        app:layout_constraintTop_toTopOf="@id/barrier_mainTop"
+        app:layout_constraintVertical_bias="0.00999999"
+        tools:text='18 bites about "trump"' />
+
     <android.support.constraint.Guideline
         android:id="@+id/guideline_mainRight"
         android:layout_width="wrap_content"
@@ -133,5 +151,32 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_end="24dp" />
+
+    <TextView
+        android:id="@+id/textView_bitesLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorAccent"
+        android:padding="5dp"
+        android:text="bites"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_mainBottom"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_mainRight"
+        app:layout_constraintStart_toStartOf="@+id/guideline_mainLeft"
+        app:layout_constraintTop_toTopOf="@+id/imageView_borderTop"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <android.support.constraint.Barrier
+        android:id="@+id/barrier_mainTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="imageView_borderTop"
+        tools:layout_editor_absoluteY="567dp" />
 
 </android.support.constraint.ConstraintLayout>

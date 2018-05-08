@@ -13,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -26,6 +27,7 @@ public class BookmarksActivity extends AppCompatActivity {
     private PagerAdapter            mPagerAdapter;
     private FloatingActionButton    backButton;
     private ImageButton             clearButton, deleteButton;
+    private TextView                totalBookmarksView;
 
     private List<Article> currentBookmarks, toRemove;
 
@@ -51,6 +53,12 @@ public class BookmarksActivity extends AppCompatActivity {
         backButton   = findViewById(R.id.floatingActionButton_back);
         clearButton  = findViewById(R.id.imageButton_clear);
         deleteButton = findViewById(R.id.imageButton_delete);
+        totalBookmarksView = findViewById(R.id.textView_totalBookmarks);
+
+        int size = currentBookmarks.size();
+        String totalString = size + " total bookmark";
+        if (size > 1) {totalString += "s";}
+        totalBookmarksView.setText(totalString);
 
         setButtons();
     }
@@ -59,12 +67,6 @@ public class BookmarksActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    Utility.saveList(getApplicationContext(), "bookmarks", currentBookmarks);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
                 updateBookmarksAndEnd();
             }
         });
@@ -138,6 +140,10 @@ public class BookmarksActivity extends AppCompatActivity {
         mPagerAdapter.notifyDataSetChanged();
         if (pos == 0) { mPager.setCurrentItem(1);}
         else { mPager.setCurrentItem(pos - 1); }
+        int size = currentBookmarks.size();
+        String totalString = size + " total bookmark";
+        if (size > 1) {totalString += "s";}
+        totalBookmarksView.setText(totalString);
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
@@ -157,11 +163,7 @@ public class BookmarksActivity extends AppCompatActivity {
     }
 
     private void updateBookmarksAndEnd() {
-        try {
-            Utility.saveList(getApplicationContext(), "bookmarks", currentBookmarks);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        updateBookmarks();
 
         Intent intent = new Intent(BookmarksActivity.this, MainActivity.class);
         intent.putParcelableArrayListExtra("toRemove", (ArrayList<Article>) toRemove);
@@ -170,14 +172,18 @@ public class BookmarksActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
+    private void updateBookmarks() {
         try {
-            Utility.saveList(this.getApplicationContext(), KeySettings.BOOKMARKS_KEY, currentBookmarks);
+            Utility.saveList(getApplicationContext(), "bookmarks", currentBookmarks);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        updateBookmarks();
     }
 
     @Override

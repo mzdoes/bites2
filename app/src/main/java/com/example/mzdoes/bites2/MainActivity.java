@@ -16,12 +16,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.internal.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private PagerAdapter            mPagerAdapter;
     private FloatingActionButton    searchButton;
     private ImageButton             bookmarkListButton, settingsButton;
-
+    private TextView                totalBites;
 
     //  IMPORTANT INSTANCE VARIABLES
     private List<Article>           searchedArticles, bookmarks;
@@ -111,21 +115,15 @@ public class MainActivity extends AppCompatActivity {
     // APP WIDGETS & TOOLS METHODS
     private void setup() {
         //SET INSTANCE/API VARIABLES
-        articleRefreshState = 0;
+
         searchedArticles = bookmarks = new ArrayList<>();
         sources = new ArrayList<>(); currentTopic = "trump";
-        try {
-            bookmarks       = Utility.readList(this.getApplicationContext(), KeySettings.BOOKMARKS_KEY);
-            currentLanguage = Utility.readString(this.getApplicationContext(), "languageSetting");
-            currentCountry  = Utility.readString(this.getApplicationContext(), "countrySetting");
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            currentLanguage = ""; currentCountry = "";
-        }
+        updateInstances();
 
         Log.d(TAG, "setup: " + bookmarks.toString());
 
         //SET WIDGETS
+        articleRefreshState = 0;
         mPager = findViewById(R.id.pager);
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             boolean lastPageChange = false;
@@ -180,10 +178,14 @@ public class MainActivity extends AppCompatActivity {
         mPager.setAdapter(mPagerAdapter);
         mPager.setPageTransformer(true, new ParallaxPageTransformer());
 
+
         searchButton       = findViewById(R.id.floatingActionButton_search);
         bookmarkListButton = findViewById(R.id.imageButton_bookmarkList);
         settingsButton     = findViewById(R.id.imageButton_settings);
         setButtons();
+
+
+        totalBites = findViewById(R.id.textView_totalBites);
 
 
         //SET API
@@ -260,9 +262,26 @@ public class MainActivity extends AppCompatActivity {
         setSearchedArticles(currentTopic);
     }
 
+    private void updateInstances() {
+        try {
+            bookmarks = Utility.readList(getApplicationContext(), KeySettings.BOOKMARKS_KEY);
+            currentLanguage = Utility.readString(getApplicationContext(), KeySettings.LANGUAGE_KEY);
+            currentCountry = Utility.readString(getApplicationContext(), KeySettings.COUNTRY_KEY);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void updateWidgets() {
         mPagerAdapter.notifyDataSetChanged();
         if (articleRefreshState == 0) { mPager.setCurrentItem(0); }
+        int size = searchedArticles.size();
+        String bitesText = size + "";
+        if (size > 1) {bitesText += " bites about '" + currentTopic + "'";}
+        else {bitesText += " bite about '" + currentTopic + "'";}
+        totalBites.setText(bitesText);
     }
 
     public void bookmarkArticle(Article articleToBookmark) {
@@ -318,6 +337,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        updateInstances();
+
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == BOOKMARKS_REQUEST) {
             //clear the local bookmark list and resume with saved bookmarks
@@ -332,15 +358,9 @@ public class MainActivity extends AppCompatActivity {
         } else if (resultCode == RESULT_FIRST_USER && requestCode == BOOKMARKS_REQUEST) {
             bookmarks.removeAll(data.getParcelableArrayListExtra("toRemove"));
         } else if (resultCode == RESULT_OK && requestCode == SETTINGS_REQUEST) {
-            try {
-                currentLanguage = Utility.readString(getApplicationContext(), KeySettings.LANGUAGE_KEY);
-                currentCountry  = Utility.readString(getApplicationContext(), KeySettings.COUNTRY_KEY);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-
+            Intent i = getIntent();
+            currentLanguage = i.getStringExtra(KeySettings.LANGUAGE_KEY);
+            currentCountry = i.getStringExtra(KeySettings.COUNTRY_KEY);
             articleRefreshState = 0;
             setArticleView();
         }

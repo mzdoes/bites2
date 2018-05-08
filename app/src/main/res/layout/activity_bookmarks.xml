@@ -106,6 +106,22 @@
         app:layout_constraintTop_toBottomOf="@id/guideline_bookmarkBottom"
         app:srcCompat="@color/colorSecondary" />
 
+    <TextView
+        android:id="@+id/textView_totalBookmarks"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Notification.Info"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bookmarkBottom"
+        app:layout_constraintEnd_toStartOf="@+id/textView_bookmarksLogo"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline_bookmarkLeft"
+        app:layout_constraintTop_toTopOf="@+id/barrier_bookmarkTop"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="15 total bookmarks" />
+
     <android.support.constraint.Guideline
         android:id="@+id/guideline_bookmarkLeft"
         android:layout_width="wrap_content"
@@ -133,5 +149,32 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_end="32dp" />
+
+    <TextView
+        android:id="@+id/textView_bookmarksLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorSecondary"
+        android:padding="5dp"
+        android:text="bookmarks"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bookmarkBottom"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_bookmarkRight"
+        app:layout_constraintStart_toStartOf="@+id/guideline_bookmarkLeft"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <android.support.constraint.Barrier
+        android:id="@+id/barrier_bookmarkTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="imageView_bookmarkBorderTop"
+        tools:layout_editor_absoluteY="567dp" />
 
 </android.support.constraint.ConstraintLayout>
