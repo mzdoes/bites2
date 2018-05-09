@@ -124,6 +124,22 @@
         app:layout_constraintVertical_bias="0.00999999"
         tools:text='18 bites about "trump"' />
 
+    <TextView
+        android:id="@+id/textView_sourceSettings"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.Compat.Notification.Info"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_mainBottom"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_mainRight"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textView_bitesLogo"
+        app:layout_constraintTop_toTopOf="@id/barrier_mainTop"
+        app:layout_constraintVertical_bias="0.00999999"
+        tools:text="Sources: EN, US" />
+
     <android.support.constraint.Guideline
         android:id="@+id/guideline_mainRight"
         android:layout_width="wrap_content"

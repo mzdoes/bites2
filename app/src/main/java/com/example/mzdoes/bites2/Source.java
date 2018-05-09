@@ -90,13 +90,13 @@ public class Source implements Parcelable, Serializable {
             country = in.readString();
         }
 
-        @Override
-        public int describeContents() {
+    @Override
+     public int describeContents() {
             return 0;
         }
 
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
+     @Override
+     public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(id);
             dest.writeString(name);
             dest.writeString(description);
@@ -104,7 +104,7 @@ public class Source implements Parcelable, Serializable {
             dest.writeString(category);
             dest.writeString(language);
             dest.writeString(country);
-        }
+    }
 
         @SuppressWarnings("unused")
         public static final Parcelable.Creator<Source> CREATOR = new Parcelable.Creator<Source>() {
@@ -118,4 +118,11 @@ public class Source implements Parcelable, Serializable {
                 return new Source[size];
             }
         };
+
+    @Override
+    public String toString() {
+        return "Source{" +
+                "id='" + id + '\'' +
+                '}';
     }
+}

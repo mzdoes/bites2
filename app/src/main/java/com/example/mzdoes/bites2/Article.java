@@ -119,4 +119,12 @@ public class Article implements Parcelable, Serializable {
                 return new Article[size];
             }
         };
+
+    @Override
+    public String toString() {
+        return "Article{" +
+                "source=" + source +
+                ", title='" + title + '\'' +
+                '}';
     }
+}

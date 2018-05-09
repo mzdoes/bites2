@@ -45,6 +45,7 @@
         android:layout_marginTop="8dp"
         android:background="@color/colorAccent"
         android:text="Settings"
+        android:padding="5dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         android:textStyle="bold|italic"
         app:layout_constraintBottom_toTopOf="@+id/guideline_settingsBottom"

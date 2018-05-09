@@ -19,13 +19,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.internal.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private PagerAdapter            mPagerAdapter;
     private FloatingActionButton    searchButton;
     private ImageButton             bookmarkListButton, settingsButton;
-    private TextView                totalBites;
+    private TextView                totalBites, sourceSettings;
 
     //  IMPORTANT INSTANCE VARIABLES
     private List<Article>           searchedArticles, bookmarks;
@@ -70,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
                 if (sourceListResponse == null || sourceListResponse.isEmpty())
                     { Toast.makeText(MainActivity.this, "No available sources for this language combination. Please change!", Toast.LENGTH_SHORT).show(); }
                 else { sources.clear(); sources.addAll(sourceListResponse); }
+
+                setSearchedArticles(currentTopic);
+
             }
 
             @Override
@@ -90,16 +90,20 @@ public class MainActivity extends AppCompatActivity {
                     { Toast.makeText(MainActivity.this, "No articles found", Toast.LENGTH_SHORT).show(); }
                 else {
                     List<Article> toRemove = new ArrayList<>();
-                    boolean found = false;
+
                     for (Article article : articleListResponse) {
-                        for (Source source : sources) { if ((article.getSource().getId()).equals(source.getId())) { found = true; } }
+                        boolean found = false;
+                        for (Source source : sources) {
+                            String articleSourceID = article.getSource().getId(); String sourceID = source.getId();
+                            if (articleSourceID.equals(sourceID)) { found = true; }
+                        }
                         if (!found) { toRemove.add(article); }
-                        found = false;
                     }
-                    articleListResponse.remove(toRemove);
+
+                    articleListResponse.removeAll(toRemove);
                     searchedArticles.clear(); searchedArticles.addAll(articleListResponse);
 
-                    if (response.isSuccessful()) { updateWidgets(); }
+                    updateWidgets();
 
                 }
             }
@@ -185,8 +189,8 @@ public class MainActivity extends AppCompatActivity {
         setButtons();
 
 
-        totalBites = findViewById(R.id.textView_totalBites);
-
+        totalBites     = findViewById(R.id.textView_totalBites);
+        sourceSettings = findViewById(R.id.textView_sourceSettings);
 
         //SET API
         Retrofit retrofit = new Retrofit.Builder().baseUrl(NewsAPI.base_Url)
@@ -258,8 +262,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void setArticleView() {
         setSources(currentLanguage, currentCountry);
-        while (sources == null) { Log.d(TAG, "setArticleView: WAITING FOR SOURCES"); }
-        setSearchedArticles(currentTopic);
     }
 
     private void updateInstances() {
@@ -282,6 +284,7 @@ public class MainActivity extends AppCompatActivity {
         if (size > 1) {bitesText += " bites about '" + currentTopic + "'";}
         else {bitesText += " bite about '" + currentTopic + "'";}
         totalBites.setText(bitesText);
+        sourceSettings.setText("Sources: " + currentLanguage.toUpperCase() + ", " + currentCountry.toUpperCase());
     }
 
     public void bookmarkArticle(Article articleToBookmark) {
@@ -358,9 +361,16 @@ public class MainActivity extends AppCompatActivity {
         } else if (resultCode == RESULT_FIRST_USER && requestCode == BOOKMARKS_REQUEST) {
             bookmarks.removeAll(data.getParcelableArrayListExtra("toRemove"));
         } else if (resultCode == RESULT_OK && requestCode == SETTINGS_REQUEST) {
-            Intent i = getIntent();
-            currentLanguage = i.getStringExtra(KeySettings.LANGUAGE_KEY);
-            currentCountry = i.getStringExtra(KeySettings.COUNTRY_KEY);
+
+            try {
+                currentLanguage = Utility.readString(getApplicationContext(), KeySettings.LANGUAGE_KEY);
+                currentCountry  = Utility.readString(getApplicationContext(), KeySettings.COUNTRY_KEY);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
             articleRefreshState = 0;
             setArticleView();
         }

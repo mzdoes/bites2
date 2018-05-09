@@ -2,16 +2,13 @@ package com.example.mzdoes.bites2;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,7 +30,7 @@ public class SettingsActivity extends AppCompatActivity {
         try {
             chosenLanguage = Utility.readString(getApplicationContext(), KeySettings.LANGUAGE_KEY);
             chosenCountry = Utility.readString(getApplicationContext(), KeySettings.COUNTRY_KEY);
-        } catch (IOException e) {
+        } catch  (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
