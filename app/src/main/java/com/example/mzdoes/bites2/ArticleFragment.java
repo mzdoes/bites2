@@ -29,7 +29,6 @@ public class ArticleFragment extends Fragment {
     private static final String URL_BLACK_IMAGE = "https://vignette.wikia.nocookie.net/joke-battles/images/5/5a/Black.jpg/revision/latest?cb=20161223050425";
     private Article currentArticle;
     private String headline, description, urlImage, sourceUrlImage;
-    private TextView headlineView;
 
     // Required empty public constructor
     public ArticleFragment() {}
@@ -43,7 +42,7 @@ public class ArticleFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_article, container, false);
         final ImageView background = view.findViewById(R.id.imageView_articleFragmentBackground);
         final ImageView sourceImg  = view.findViewById(R.id.imageView_source);
-        headlineView      = view.findViewById(R.id.textView_headline);
+        TextView headlineView      = view.findViewById(R.id.textView_headline);
         TextView descriptionView   = view.findViewById(R.id.textView_description);
 
         // Fixes crash bug when scrolling
@@ -81,7 +80,8 @@ public class ArticleFragment extends Fragment {
                                 if (!url.startsWith("http://") && !url.startsWith("https://"))
                                     url = "http://" + url;
 
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                Intent browserIntent = new Intent(getActivity(), BrowserActivity.class);
+                                browserIntent.putExtra(KeySettings.URL_KEY, url);
                                 startActivity(browserIntent);
                             }
                         });
@@ -98,7 +98,7 @@ public class ArticleFragment extends Fragment {
             }
         });
 
-        // HeadlineVuew OnLongClick to Bookmark
+        // HeadlineView OnLongClick to Bookmark
         headlineView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -150,7 +150,7 @@ public class ArticleFragment extends Fragment {
         headline = currentArticle.getTitle();
         sourceUrlImage = "logo.clearbit.com/" + currentArticle.getSource().getUrl();
 
-        Log.d("ArticleFragment", "onCreate: " + sourceUrlImage);
+//        Log.d("ArticleFragment", "onCreate: " + sourceUrlImage);
     }
 
 

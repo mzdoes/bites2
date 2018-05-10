@@ -77,7 +77,8 @@ public class BookmarkFragment extends Fragment {
                                 if (!url.startsWith("http://") && !url.startsWith("https://"))
                                     url = "http://" + url;
 
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                Intent browserIntent = new Intent(getActivity(), BrowserActivity.class);
+                                browserIntent.putExtra(KeySettings.URL_KEY, url);
                                 startActivity(browserIntent);
                             }
                         });

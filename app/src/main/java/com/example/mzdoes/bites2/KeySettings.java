@@ -13,4 +13,6 @@ public class KeySettings {
     public static final String LANGUAGE_KEY = "language";
 
     public static final String COUNTRY_KEY = "country";
+
+    public static final String URL_KEY = "url";
 }

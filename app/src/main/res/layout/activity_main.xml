@@ -43,7 +43,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@android:color/transparent"
-        android:tint="@android:color/background_light"
+        android:tint="@color/colorSecondary"
         app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton_search"
         app:layout_constraintEnd_toStartOf="@+id/floatingActionButton_search"
         app:layout_constraintHorizontal_bias="0.92"
@@ -57,7 +57,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@android:color/transparent"
-        android:tint="@android:color/background_light"
+        android:tint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton_search"
         app:layout_constraintEnd_toStartOf="@+id/guideline_mainRight"
         app:layout_constraintHorizontal_bias="0.05"
@@ -75,7 +75,7 @@
         app:layout_constraintStart_toStartOf="@+id/guideline_mainLeft"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@color/colorAccent" />
+        app:srcCompat="@color/colorPrimary" />
 
     <ImageView
         android:id="@+id/imageView_borderLeft"
@@ -85,7 +85,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline_mainLeft"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@color/colorAccent" />
+        app:srcCompat="@color/colorPrimary" />
 
     <ImageView
         android:id="@+id/imageView_borderRight"
@@ -95,7 +95,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline_mainRight"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@color/colorAccent" />
+        app:srcCompat="@color/colorPrimary" />
 
     <ImageView
         android:id="@+id/imageView_borderBottom"
@@ -106,7 +106,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/guideline_mainLeft"
         app:layout_constraintTop_toBottomOf="@id/guideline_mainBottom"
-        app:srcCompat="@color/colorAccent" />
+        app:srcCompat="@color/colorPrimary" />
 
     <TextView
         android:id="@+id/textView_totalBites"
@@ -176,7 +176,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@color/colorAccent"
+        android:background="@color/colorPrimary"
         android:padding="5dp"
         android:text="bites"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"

@@ -224,6 +224,16 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
 
+                searchDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "Headlines",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                currentTopic = "";
+                                articleRefreshState = 0;
+                                setArticleView();
+                            }
+                        });
+
                 searchDialog.show();
             }
         });
@@ -265,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateInstances() {
+        currentLanguage = currentCountry = "";
         try {
             bookmarks = Utility.readList(getApplicationContext(), KeySettings.BOOKMARKS_KEY);
             currentLanguage = Utility.readString(getApplicationContext(), KeySettings.LANGUAGE_KEY);
@@ -279,12 +290,21 @@ public class MainActivity extends AppCompatActivity {
     private void updateWidgets() {
         mPagerAdapter.notifyDataSetChanged();
         if (articleRefreshState == 0) { mPager.setCurrentItem(0); }
+
+
         int size = searchedArticles.size();
         String bitesText = size + "";
-        if (size > 1) {bitesText += " bites about '" + currentTopic + "'";}
-        else {bitesText += " bite about '" + currentTopic + "'";}
+        String topicHolder; if (currentTopic.equals("")) { topicHolder = "headlines"; } else { topicHolder = currentTopic; }
+        if (size > 1) {bitesText += " bites about '" + topicHolder + "'";}
+        else {bitesText += " bite about '" + topicHolder + "'";}
         totalBites.setText(bitesText);
-        sourceSettings.setText("Sources: " + currentLanguage.toUpperCase() + ", " + currentCountry.toUpperCase());
+
+
+        String languageHolder; String countryHolder; String sourceText;
+        if (currentLanguage.equals("")) { languageHolder = "All"; } else { languageHolder = currentLanguage.toUpperCase(); }
+        if (currentCountry.equals(""))  { countryHolder  = "All"; } else { countryHolder  = currentCountry.toUpperCase();  }
+        sourceText = "Sources: " + languageHolder + ", " + countryHolder;
+        sourceSettings.setText(sourceText);
     }
 
     public void bookmarkArticle(Article articleToBookmark) {

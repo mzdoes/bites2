@@ -41,7 +41,7 @@
         android:background="@color/colorAccent"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:textColor="@android:color/background_light"
+        android:textColor="@android:color/black"
         android:textStyle="bold|italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline_articleRight"
