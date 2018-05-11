@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                     lastPageChange = false;
                 }
             }
-        }); //---  UPDATE FOR ADDING ARTICLES AT END THING!  ---
+        });
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         mPager.setPageTransformer(true, new ParallaxPageTransformer());
@@ -254,7 +254,8 @@ public class MainActivity extends AppCompatActivity {
                     i.putParcelableArrayListExtra(KeySettings.BOOKMARKS_KEY, (ArrayList<Article>) bookmarks);
 
                     startActivityForResult(i, BOOKMARKS_REQUEST);
-                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                    overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
+
                 }
             }
         });
@@ -270,9 +271,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setArticleView() {
-        setSources(currentLanguage, currentCountry);
-    }
+    private void setArticleView() { setSources(currentLanguage, currentCountry); }
 
     private void updateInstances() {
         currentLanguage = currentCountry = "";

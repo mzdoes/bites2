@@ -169,7 +169,7 @@ public class BookmarksActivity extends AppCompatActivity {
         intent.putParcelableArrayListExtra("toRemove", (ArrayList<Article>) toRemove);
         setResult(RESULT_OK, intent);
         finish();
-        overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
+        overridePendingTransition(R.anim.right_in, R.anim.left_out);
     }
 
     private void updateBookmarks() {

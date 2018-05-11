@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     tools:context="com.example.mzdoes.bites2.BrowserActivity">
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton_browserClose"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:clickable="true"
         app:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toTopOf="@id/guideline_browserTop"
@@ -27,7 +28,9 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout_browser"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+    </WebView>
 
     <LinearLayout
         android:id="@+id/linearLayout_browser"
@@ -82,4 +85,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="48dp" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="5dp"
+        android:progressTint="@color/colorSecondary"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout_browser"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline_browserTop"
+        app:layout_constraintVertical_bias="1.0" />
 </android.support.constraint.ConstraintLayout>

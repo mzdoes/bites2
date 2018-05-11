@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -67,34 +66,13 @@ public class ArticleFragment extends Fragment {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String url = currentArticle.getUrl();
+                if (!url.startsWith("http://") && !url.startsWith("https://"))
+                    url = "http://" + url;
 
-                //---  UPDATE TO ALLOW USER CHOICE FOR DIALOG TO POP UP IN SETTINGS  ---
-                final AlertDialog confirmOpenDialog = new AlertDialog.Builder(getContext()).create();
-                confirmOpenDialog.setTitle("Open in browser?");
-
-                confirmOpenDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String url = currentArticle.getUrl();
-                                if (!url.startsWith("http://") && !url.startsWith("https://"))
-                                    url = "http://" + url;
-
-                                Intent browserIntent = new Intent(getActivity(), BrowserActivity.class);
-                                browserIntent.putExtra(KeySettings.URL_KEY, url);
-                                startActivity(browserIntent);
-                            }
-                        });
-
-                confirmOpenDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                confirmOpenDialog.dismiss();
-                            }
-                        });
-
-                confirmOpenDialog.show();
+                Intent browserIntent = new Intent(getActivity(), BrowserActivity.class);
+                browserIntent.putExtra(KeySettings.URL_KEY, url);
+                startActivity(browserIntent);
             }
         });
 
