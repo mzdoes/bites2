@@ -22,23 +22,21 @@ import java.util.List;
 
 public class BookmarksActivity extends AppCompatActivity {
 
-
+    /**  BOOKMARKSACTIVITY INSTANCE VARIABLES  **/
+    // ANDROID WIDGETS & TOOLS
     private ViewPager               mPager;
     private PagerAdapter            mPagerAdapter;
     private FloatingActionButton    backButton;
     private ImageButton             clearButton, deleteButton;
     private TextView                totalBookmarksView;
 
+    //IMPORTANT INSTANCE VARIABLES
     private List<Article> currentBookmarks, toRemove;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bookmarks);
 
-        setup();
-    }
 
+    /** ---  METHODS AND STUFF  ---- **/
+    // APP WIDGETS AND TOOL METHODS
     private void setup() {
         currentBookmarks = toRemove = new ArrayList<>();
 
@@ -146,22 +144,6 @@ public class BookmarksActivity extends AppCompatActivity {
         totalBookmarksView.setText(totalString);
     }
 
-    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        public ScreenSlidePagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return BookmarkFragment.newInstance(currentBookmarks.get(position));
-        }
-
-        @Override
-        public int getCount() {
-            return currentBookmarks.size();
-        }
-    }
-
     private void updateBookmarksAndEnd() {
         updateBookmarks();
 
@@ -177,6 +159,32 @@ public class BookmarksActivity extends AppCompatActivity {
             Utility.saveList(getApplicationContext(), "bookmarks", currentBookmarks);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+
+    // MISCELLANEOUS
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_bookmarks);
+
+        setup();
+    }
+
+    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+        public ScreenSlidePagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return BookmarkFragment.newInstance(currentBookmarks.get(position));
+        }
+
+        @Override
+        public int getCount() {
+            return currentBookmarks.size();
         }
     }
 

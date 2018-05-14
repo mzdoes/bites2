@@ -24,24 +24,27 @@ import com.squareup.picasso.Picasso;
 public class BookmarkFragment extends Fragment {
 
 
-    private static final String URL_BLACK_IMAGE = "https://vignette.wikia.nocookie.net/joke-battles/images/5/5a/Black.jpg/revision/latest?cb=20161223050425";
+    /**  BOOKMARKFRAGMENT INSTANCE VARIABLES  **/
+    // ANDROID WIDGETS AND TOOLS
     private Article currentArticle;
     private String headline, description, urlImage;
-    private TextView headlineView;
-    private ImageView background;
 
+    // FINAL VARIABLES
+    private static final String URL_BLACK_IMAGE = "https://vignette.wikia.nocookie.net/joke-battles/images/5/5a/Black.jpg/revision/latest?cb=20161223050425";
+
+    /** ---  METHODS AND STUFF  ---- **/
     // Required empty public constructor
     public BookmarkFragment() {}
 
-
+    // MISCELLANEOUS
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bookmark, container, false);
-        background = view.findViewById(R.id.imageView_bookmarkFragmentBackground);
-        headlineView      = view.findViewById(R.id.textView_bookmarkHeadline);
+        final ImageView background = view.findViewById(R.id.imageView_bookmarkFragmentBackground);
+        TextView headlineView      = view.findViewById(R.id.textView_bookmarkHeadline);
         TextView descriptionView   = view.findViewById(R.id.textView_bookmarkDescription);
 
         // Fixes crash bug when scrolling

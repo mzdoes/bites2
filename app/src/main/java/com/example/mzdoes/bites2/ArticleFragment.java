@@ -25,14 +25,20 @@ import com.squareup.picasso.Picasso;
  */
 public class ArticleFragment extends Fragment {
 
-    private static final String URL_BLACK_IMAGE = "https://vignette.wikia.nocookie.net/joke-battles/images/5/5a/Black.jpg/revision/latest?cb=20161223050425";
+
+    /**  ARTICLEFRAGMENT INSTANCE VARIABLES  **/
+    // ANDROID WIDGETS AND TOOLS
     private Article currentArticle;
     private String headline, description, urlImage, sourceUrlImage;
 
+    // FINAL VARIABLES
+    private static final String URL_BLACK_IMAGE = "https://vignette.wikia.nocookie.net/joke-battles/images/5/5a/Black.jpg/revision/latest?cb=20161223050425";
+
+    /** ---  METHODS AND STUFF  ---- **/
     // Required empty public constructor
     public ArticleFragment() {}
 
-
+    //MISCELLANEOUS
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,7 +112,6 @@ public class ArticleFragment extends Fragment {
 
         return view;
     }
-
 
     public static ArticleFragment newInstance(Article article) {
         ArticleFragment fragment = new ArticleFragment();

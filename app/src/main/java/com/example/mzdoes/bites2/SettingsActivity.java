@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import java.util.regex.Pattern;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    /**  SETTINGSACTIVITY INSTANCE VARIABLES  **/
     // ANDROID WIDGETS
     private RadioGroup           languageSettings, countrySettings;
     private FloatingActionButton settingsApplyButton;
@@ -21,28 +23,9 @@ public class SettingsActivity extends AppCompatActivity {
     // INSTANCE VARIABLES
     private String               chosenLanguage, chosenCountry;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
 
-        chosenLanguage = chosenCountry = "";
-        try {
-            chosenLanguage = Utility.readString(getApplicationContext(), KeySettings.LANGUAGE_KEY);
-            chosenCountry = Utility.readString(getApplicationContext(), KeySettings.COUNTRY_KEY);
-        } catch  (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        languageSettings = findViewById(R.id.radioGroup_languageSettings);
-        countrySettings = findViewById(R.id.radioGroup_countrySettings);
-        settingsApplyButton = findViewById(R.id.floatingActionButton_settingsApply);
-
-        setWidgets();
-    }
-
+    /** ---  METHODS AND STUFF  ---- **/
+    // APP WIDGETS AND TOOLS METHODS
     private void setWidgets() {
         languageSettings.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -52,9 +35,13 @@ public class SettingsActivity extends AppCompatActivity {
                 else if (radioGroup.indexOfChild(findViewById(checkedId)) == 2) {chosenLanguage = "es";}
                 else if (radioGroup.indexOfChild(findViewById(checkedId)) == 3) {chosenLanguage = "fr";}
 
-                Toast.makeText(SettingsActivity.this, chosenLanguage, Toast.LENGTH_SHORT).show();
             }
         });
+
+        if (chosenLanguage.equals("")) { RadioButton b = findViewById(R.id.radioButton_languageAll); b.setChecked(true); }
+        else if (chosenLanguage.equals("en")) { RadioButton b = findViewById(R.id.radioButton_languageEN); b.setChecked(true); }
+        else if (chosenLanguage.equals("es")) { RadioButton b = findViewById(R.id.radioButton_languageES); b.setChecked(true); }
+        else if (chosenLanguage.equals("fr")) { RadioButton b = findViewById(R.id.radioButton_languageFR); b.setChecked(true); }
 
         countrySettings.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -66,9 +53,16 @@ public class SettingsActivity extends AppCompatActivity {
                 else if (radioGroup.indexOfChild(findViewById(checkedId)) == 4) {chosenCountry = "mx";}
                 else if (radioGroup.indexOfChild(findViewById(checkedId)) == 5) {chosenCountry = "us";}
 
-                Toast.makeText(SettingsActivity.this, chosenCountry, Toast.LENGTH_SHORT).show();
             }
         });
+
+        if (chosenCountry.equals("")) { RadioButton b = findViewById(R.id.radioButton_countryAll); b.setChecked(true); }
+        else if (chosenCountry.equals("ca")) { RadioButton b = findViewById(R.id.radioButton_countryCA); b.setChecked(true); }
+        else if (chosenCountry.equals("fr")) { RadioButton b = findViewById(R.id.radioButton_countryFR); b.setChecked(true); }
+        else if (chosenCountry.equals("gb")) { RadioButton b = findViewById(R.id.radioButton_countryGB); b.setChecked(true); }
+        else if (chosenCountry.equals("mx")) { RadioButton b = findViewById(R.id.radioButton_countryMX); b.setChecked(true); }
+        else if (chosenCountry.equals("us")) { RadioButton b = findViewById(R.id.radioButton_countryUS); b.setChecked(true); }
+
 
         settingsApplyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,10 +84,27 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
-    private String getAbbreviation(String string) {
-        Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(string);
-        if (m.matches()) { return m.group(1); }
-        else { return ""; }
+    // MISCELLANEOUS
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_settings);
+
+        chosenLanguage = chosenCountry = "";
+        try {
+            chosenLanguage = Utility.readString(getApplicationContext(), KeySettings.LANGUAGE_KEY);
+            chosenCountry = Utility.readString(getApplicationContext(), KeySettings.COUNTRY_KEY);
+        } catch  (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        languageSettings = findViewById(R.id.radioGroup_languageSettings);
+        countrySettings = findViewById(R.id.radioGroup_countrySettings);
+        settingsApplyButton = findViewById(R.id.floatingActionButton_settingsApply);
+
+        setWidgets();
     }
 
     @Override

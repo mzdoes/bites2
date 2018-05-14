@@ -13,7 +13,7 @@ public interface NewsAPI {
     public String base_Url = "http://newsapi.org/v2/";
 
     @GET("top-headlines")
-    Call<ArticleResponse> getArticleList(@Query("q") String topic,  @Query("pageSize") int articleNum, @Query("apiKey") String apiKey);
+    Call<ArticleResponse> getArticleList(@Query("q") String topic, @Query("country") String country, @Query("pageSize") int articleNum, @Query("apiKey") String apiKey);
 
     @GET("sources")
     Call<SourceResponse> getSourceList(@Query("language") String language, @Query("country") String country, @Query("apiKey") String apiKey);

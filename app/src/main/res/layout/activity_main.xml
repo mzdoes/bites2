@@ -22,7 +22,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline_mainRight"
         app:layout_constraintStart_toStartOf="@+id/guideline_mainLeft"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.9"
+        app:layout_constraintVertical_bias="0.93"
         app:srcCompat="@drawable/ic_search_black_24dp" />
 
     <android.support.v4.view.ViewPager

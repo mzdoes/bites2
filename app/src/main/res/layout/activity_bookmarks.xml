@@ -21,7 +21,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline_bookmarkRight"
         app:layout_constraintStart_toStartOf="@+id/guideline_bookmarkLeft"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.9"
+        app:layout_constraintVertical_bias="0.93"
         app:srcCompat="@drawable/ic_arrow_back_black_24dp" />
 
     <android.support.v4.view.ViewPager
@@ -141,14 +141,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="32dp" />
+        app:layout_constraintGuide_begin="24dp" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline_bookmarkBottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="32dp" />
+        app:layout_constraintGuide_end="24dp" />
 
     <TextView
         android:id="@+id/textView_bookmarksLogo"

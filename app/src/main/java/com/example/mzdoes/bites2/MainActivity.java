@@ -48,16 +48,19 @@ public class MainActivity extends AppCompatActivity {
     private NewsAPI                 newsAPI;
     private String                  currentTopic, currentLanguage, currentCountry;
 
-
     //  FINAL VARIABLES
-    public static final String TAG = "MainActivity";
+    public static final String TAG = "MainActivity";   // for test logging purposes
     public static final int    BOOKMARKS_REQUEST = 10;
     public static final int    SETTINGS_REQUEST  = 25;
     public static final int    DEFAULT_ARTICLENUM_LOAD = 20;
 
+
+
+
+
     /** ---  METHODS AND STUFF  ---- **/
     // API METHODS
-    private void setSources(String currentLanguage, String currentCountry) {
+    private void setSources(String currentLanguage, final String currentCountry) {
         Call<SourceResponse> sourceResponseCall = newsAPI.getSourceList(currentLanguage, currentCountry, KeySettings.API_KEY);
         sourceResponseCall.enqueue(new Callback<SourceResponse>() {
             @Override
@@ -68,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                     { Toast.makeText(MainActivity.this, "No available sources for this language combination. Please change!", Toast.LENGTH_SHORT).show(); }
                 else { sources.clear(); sources.addAll(sourceListResponse); }
 
-                setSearchedArticles(currentTopic);
+                setSearchedArticles(currentTopic, currentCountry);
 
             }
 
@@ -79,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setSearchedArticles(String currentTopic) {
-        Call<ArticleResponse> articleResponseCall = newsAPI.getArticleList(currentTopic, DEFAULT_ARTICLENUM_LOAD + (articleRefreshState * 10), KeySettings.API_KEY);
+    private void setSearchedArticles(String currentTopic, String currentCountry) {
+        Call<ArticleResponse> articleResponseCall = newsAPI.getArticleList(currentTopic, currentCountry,DEFAULT_ARTICLENUM_LOAD + (articleRefreshState * 10), KeySettings.API_KEY);
         articleResponseCall.enqueue(new Callback<ArticleResponse>() {
             @Override
             public void onResponse(Call<ArticleResponse> call, Response<ArticleResponse> response) {
@@ -119,12 +122,11 @@ public class MainActivity extends AppCompatActivity {
     // APP WIDGETS & TOOLS METHODS
     private void setup() {
         //SET INSTANCE/API VARIABLES
-
         searchedArticles = bookmarks = new ArrayList<>();
         sources = new ArrayList<>(); currentTopic = "trump";
         updateInstances();
 
-        Log.d(TAG, "setup: " + bookmarks.toString());
+
 
         //SET WIDGETS
         articleRefreshState = 0;
@@ -144,14 +146,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageScrollStateChanged(int state) {
                 int lastIdx = mPagerAdapter.getCount() - 1;
-
                 int curItem = mPager.getCurrentItem();
+
                 if (curItem == lastIdx && state == 1) {
                     lastPageChange = true;
 
                     if (articleRefreshState != 8) {
                         final AlertDialog refreshDialog = new AlertDialog.Builder(MainActivity.this).create();
                         refreshDialog.setTitle("Refresh for more articles?");
+
 
                         refreshDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
                                 new DialogInterface.OnClickListener() {
@@ -192,6 +195,8 @@ public class MainActivity extends AppCompatActivity {
         totalBites     = findViewById(R.id.textView_totalBites);
         sourceSettings = findViewById(R.id.textView_sourceSettings);
 
+
+
         //SET API
         Retrofit retrofit = new Retrofit.Builder().baseUrl(NewsAPI.base_Url)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -228,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                currentTopic = "";
+                                currentTopic = "all";
                                 articleRefreshState = 0;
                                 setArticleView();
                             }
@@ -293,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
 
         int size = searchedArticles.size();
         String bitesText = size + "";
-        String topicHolder; if (currentTopic.equals("")) { topicHolder = "headlines"; } else { topicHolder = currentTopic; }
+        String topicHolder; if (currentTopic.equals("all")) { topicHolder = "headlines"; } else { topicHolder = currentTopic; }
         if (size > 1) {bitesText += " bites about '" + topicHolder + "'";}
         else {bitesText += " bite about '" + topicHolder + "'";}
         totalBites.setText(bitesText);
@@ -381,14 +386,7 @@ public class MainActivity extends AppCompatActivity {
             bookmarks.removeAll(data.getParcelableArrayListExtra("toRemove"));
         } else if (resultCode == RESULT_OK && requestCode == SETTINGS_REQUEST) {
 
-            try {
-                currentLanguage = Utility.readString(getApplicationContext(), KeySettings.LANGUAGE_KEY);
-                currentCountry  = Utility.readString(getApplicationContext(), KeySettings.COUNTRY_KEY);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            updateInstances();
 
             articleRefreshState = 0;
             setArticleView();

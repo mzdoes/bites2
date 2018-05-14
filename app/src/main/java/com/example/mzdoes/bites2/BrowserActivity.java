@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 public class BrowserActivity extends AppCompatActivity {
 
+    /**  BROWSERACTIVITY INSTANCE VARIABLES  **/
     // ANDROID WIDGETS AND TOOLS
     private FloatingActionButton closeButton;
     private ImageButton          navBack, navForward;
@@ -24,8 +25,11 @@ public class BrowserActivity extends AppCompatActivity {
     private WebView              webView;
     private ProgressBar          progressBar;
 
+    // IMPORTANT INSTANCE VARIABLES
     private String               currentUrl;
 
+    /** ---  METHODS AND STUFF  ---- **/
+    // APP WIDGETS AND TOOLS METHODS
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,5 +103,6 @@ public class BrowserActivity extends AppCompatActivity {
                 else { Toast.makeText(BrowserActivity.this, "Cannot go forward.", Toast.LENGTH_SHORT).show(); }
             }
         });
+
     }
 }
