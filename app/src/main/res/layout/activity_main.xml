@@ -117,8 +117,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Notification.Info"
         android:textColor="@android:color/darker_gray"
         app:layout_constraintBottom_toTopOf="@+id/guideline_mainBottom"
-        app:layout_constraintEnd_toStartOf="@+id/textView_bitesLogo"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintEnd_toStartOf="@+id/imageView_logo"
         app:layout_constraintStart_toStartOf="@+id/guideline_mainLeft"
         app:layout_constraintTop_toTopOf="@id/barrier_mainTop"
         app:layout_constraintVertical_bias="0.00999999"
@@ -134,8 +133,7 @@
         android:textColor="@android:color/darker_gray"
         app:layout_constraintBottom_toTopOf="@+id/guideline_mainBottom"
         app:layout_constraintEnd_toStartOf="@+id/guideline_mainRight"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textView_bitesLogo"
+        app:layout_constraintStart_toEndOf="@+id/imageView_logo"
         app:layout_constraintTop_toTopOf="@id/barrier_mainTop"
         app:layout_constraintVertical_bias="0.00999999"
         tools:text="Sources: EN, US" />
@@ -168,24 +166,22 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_end="24dp" />
 
-    <TextView
-        android:id="@+id/textView_bitesLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/imageView_logo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:padding="3dp"
         android:background="@color/colorPrimary"
-        android:padding="5dp"
-        android:text="bites"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:textStyle="bold"
+        android:tint="@android:color/white"
         app:layout_constraintBottom_toTopOf="@+id/guideline_mainBottom"
         app:layout_constraintEnd_toStartOf="@+id/guideline_mainRight"
         app:layout_constraintStart_toStartOf="@+id/guideline_mainLeft"
-        app:layout_constraintTop_toTopOf="@+id/imageView_borderTop"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.00999999"
+        app:srcCompat="@drawable/logo" />
 
     <android.support.constraint.Barrier
         android:id="@+id/barrier_mainTop"
