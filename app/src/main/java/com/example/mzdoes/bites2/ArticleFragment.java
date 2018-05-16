@@ -7,13 +7,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,6 +34,7 @@ public class ArticleFragment extends Fragment {
     // ANDROID WIDGETS AND TOOLS
     private Article currentArticle;
     private String headline, description, urlImage, sourceUrlImage;
+    private boolean aBookmark;
 
     // FINAL VARIABLES
     private static final String URL_BLACK_IMAGE = "https://vignette.wikia.nocookie.net/joke-battles/images/5/5a/Black.jpg/revision/latest?cb=20161223050425";
@@ -59,7 +64,7 @@ public class ArticleFragment extends Fragment {
 
         background.setColorFilter(Color.rgb(123, 123, 123), PorterDuff.Mode.MULTIPLY);
 
-        // For the source ImageView
+        // For the source ImageView STILL NEEDS TO BE IMPLEMENTED
         if (!(sourceUrlImage == null || sourceUrlImage.isEmpty())) { Picasso.with(getContext()).load(sourceUrlImage).fit().centerCrop().into(sourceImg); }
         else { Picasso.with(getContext()).load(URL_BLACK_IMAGE).fit().centerCrop().into(sourceImg); }
 
@@ -68,17 +73,20 @@ public class ArticleFragment extends Fragment {
         headlineView.setText(headline); descriptionView.setText(description);
         view.setBackgroundColor((int) android.R.color.background_dark);
 
-        // View.onClick to open article in a browser
+        // View.onClick or swipe up to open article in a browser
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = currentArticle.getUrl();
-                if (!url.startsWith("http://") && !url.startsWith("https://"))
-                    url = "http://" + url;
+                openURL();
+            }
+        });
 
-                Intent browserIntent = new Intent(getActivity(), BrowserActivity.class);
-                browserIntent.putExtra(KeySettings.URL_KEY, url);
-                startActivity(browserIntent);
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int action = motionEvent.getAction();
+                if (action == MotionEvent.ACTION_UP) { openURL(); }
+                return true;
             }
         });
 
@@ -110,6 +118,40 @@ public class ArticleFragment extends Fragment {
             }
         });
 
+
+        // Set Buttons
+        final ImageButton bookmarkButton = view.findViewById(R.id.imageButton_bookmarkArticle);
+        ImageButton shareButton = view.findViewById(R.id.imageButton_shareArticle);
+
+        if (aBookmark) { bookmarkButton.setImageResource(R.drawable.ic_bookmark_black_24dp); }
+        else { bookmarkButton.setImageResource(R.drawable.ic_bookmark_border_black_24dp); }
+
+        bookmarkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (aBookmark) {
+                    ((MainActivity) getActivity()).removeBookmark(currentArticle);
+                    aBookmark = false;
+                    bookmarkButton.setImageResource(R.drawable.ic_bookmark_border_black_24dp);
+                }
+                else {
+                    ((MainActivity) getActivity()).bookmarkArticle(currentArticle);
+                    aBookmark = true;
+                    bookmarkButton.setImageResource(R.drawable.ic_bookmark_black_24dp);
+                }
+            }
+        });
+
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "Check this article out: " + currentArticle.getUrl());
+                shareIntent.setType("text/plain"); startActivity(shareIntent);
+            }
+        });
+
         return view;
     }
 
@@ -133,7 +175,19 @@ public class ArticleFragment extends Fragment {
         headline = currentArticle.getTitle();
         sourceUrlImage = "logo.clearbit.com/" + currentArticle.getSource().getUrl();
 
+        aBookmark = ((MainActivity) getActivity()).ifBookmarkExists(currentArticle);
+
 //        Log.d("ArticleFragment", "onCreate: " + sourceUrlImage);
+    }
+
+    private void openURL() {
+        String url = currentArticle.getUrl();
+        if (!url.startsWith("http://") && !url.startsWith("https://"))
+            url = "http://" + url;
+
+        Intent browserIntent = new Intent(getActivity(), BrowserActivity.class);
+        browserIntent.putExtra(KeySettings.URL_KEY, url);
+        startActivity(browserIntent);
     }
 
 

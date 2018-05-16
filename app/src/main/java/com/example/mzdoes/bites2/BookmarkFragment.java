@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -60,17 +61,20 @@ public class BookmarkFragment extends Fragment {
         headlineView.setText(headline); descriptionView.setText(description);
         view.setBackgroundColor((int) android.R.color.background_dark);
 
-        // View.onClick to open article in a browser
+        // View.onClick or swipe up to open article in a browser
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = currentArticle.getUrl();
-                if (!url.startsWith("http://") && !url.startsWith("https://"))
-                    url = "http://" + url;
+                openURL();
+            }
+        });
 
-                Intent browserIntent = new Intent(getActivity(), BrowserActivity.class);
-                browserIntent.putExtra(KeySettings.URL_KEY, url);
-                startActivity(browserIntent);
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int action = motionEvent.getAction();
+                if (action == MotionEvent.ACTION_UP) { openURL(); }
+                return true;
             }
         });
 
@@ -97,4 +101,13 @@ public class BookmarkFragment extends Fragment {
         headline = currentArticle.getTitle();
     }
 
+    private void openURL() {
+        String url = currentArticle.getUrl();
+        if (!url.startsWith("http://") && !url.startsWith("https://"))
+            url = "http://" + url;
+
+        Intent browserIntent = new Intent(getActivity(), BrowserActivity.class);
+        browserIntent.putExtra(KeySettings.URL_KEY, url);
+        startActivity(browserIntent);
+    }
 }

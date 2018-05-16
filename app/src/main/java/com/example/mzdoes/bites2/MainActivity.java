@@ -312,19 +312,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void bookmarkArticle(Article articleToBookmark) {
-        boolean found = false;
-        for (Article article : bookmarks) { if (articleToBookmark.equals(article)) found = true; }
+        boolean found = ifBookmarkExists(articleToBookmark);
         if (!found) {
             bookmarks.add(articleToBookmark);
             try {
                 Utility.saveList(this.getApplicationContext(), KeySettings.BOOKMARKS_KEY, bookmarks);
-                Toast.makeText(this, "Bookmarked article!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Bookmarked article", Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else { Toast.makeText(this, "Article already bookmarked.", Toast.LENGTH_SHORT).show(); }
+        } else { Toast.makeText(this, "Article already bookmarked", Toast.LENGTH_SHORT).show(); }
     }
 
+    public void removeBookmark(Article articleToRemove) {
+        boolean found = ifBookmarkExists(articleToRemove);
+        if (found) {
+            bookmarks.remove(articleToRemove);
+            try {
+                Utility.saveList(this.getApplicationContext(), KeySettings.BOOKMARKS_KEY, bookmarks);
+                Toast.makeText(this, "Removed bookmark", Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else { Toast.makeText(this, "Bookmark doesn't exist.", Toast.LENGTH_SHORT).show(); }
+    }
+
+    public boolean ifBookmarkExists (Article articleToCheck) {
+        boolean found = false;
+        for (Article article : bookmarks) { if (articleToCheck.equals(article)) found = true; }
+        return found;
+    }
 
     // MISCELLANEOUS
     @Override
