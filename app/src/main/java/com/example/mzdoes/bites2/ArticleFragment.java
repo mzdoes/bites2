@@ -2,16 +2,12 @@ package com.example.mzdoes.bites2;
 
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -35,6 +31,7 @@ public class ArticleFragment extends Fragment {
     private Article currentArticle;
     private String headline, description, urlImage, sourceUrlImage;
     private boolean aBookmark;
+    private ImageButton bookmarkButton;
 
     // FINAL VARIABLES
     private static final String URL_BLACK_IMAGE = "https://vignette.wikia.nocookie.net/joke-battles/images/5/5a/Black.jpg/revision/latest?cb=20161223050425";
@@ -90,41 +87,12 @@ public class ArticleFragment extends Fragment {
             }
         });
 
-        // HeadlineView OnLongClick to Bookmark
-        headlineView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                final AlertDialog confirmBookmarkDialog = new AlertDialog.Builder(getContext()).create();
-                confirmBookmarkDialog.setTitle("Bookmark this article?");
-
-                confirmBookmarkDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                ((MainActivity) getActivity()).bookmarkArticle(currentArticle);
-                            }
-                        });
-                confirmBookmarkDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                confirmBookmarkDialog.dismiss();
-                            }
-                        });
-
-                confirmBookmarkDialog.show();
-
-                return false;
-            }
-        });
-
 
         // Set Buttons
-        final ImageButton bookmarkButton = view.findViewById(R.id.imageButton_bookmarkArticle);
+        bookmarkButton = view.findViewById(R.id.imageButton_bookmarkArticle);
         ImageButton shareButton = view.findViewById(R.id.imageButton_shareArticle);
 
-        if (aBookmark) { bookmarkButton.setImageResource(R.drawable.ic_bookmark_black_24dp); }
-        else { bookmarkButton.setImageResource(R.drawable.ic_bookmark_border_black_24dp); }
+        updateBookmarkButton();
 
         bookmarkButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +115,7 @@ public class ArticleFragment extends Fragment {
             public void onClick(View view) {
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "Check this article out: " + currentArticle.getUrl());
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "Check this article out: " + currentArticle.getTitle() + " | " + currentArticle.getUrl());
                 shareIntent.setType("text/plain"); startActivity(shareIntent);
             }
         });
@@ -175,7 +143,7 @@ public class ArticleFragment extends Fragment {
         headline = currentArticle.getTitle();
         sourceUrlImage = "logo.clearbit.com/" + currentArticle.getSource().getUrl();
 
-        aBookmark = ((MainActivity) getActivity()).ifBookmarkExists(currentArticle);
+        updateABookmark();
 
 //        Log.d("ArticleFragment", "onCreate: " + sourceUrlImage);
     }
@@ -190,5 +158,22 @@ public class ArticleFragment extends Fragment {
         startActivity(browserIntent);
     }
 
+    private void updateABookmark() { aBookmark = ((MainActivity) getActivity()).ifBookmarkExists(currentArticle); }
+
+    private void updateBookmarkButton() {
+        updateABookmark();
+
+        Log.d("ArticleFragment", "updateBookmarkButton: " + aBookmark);
+
+        if (aBookmark) { bookmarkButton.setImageResource(R.drawable.ic_bookmark_black_24dp); }
+        else { bookmarkButton.setImageResource(R.drawable.ic_bookmark_border_black_24dp); }
+    }
+
+
+    @Override
+    public void onResume() {
+        updateBookmarkButton();
+        super.onResume();
+    }
 
 }

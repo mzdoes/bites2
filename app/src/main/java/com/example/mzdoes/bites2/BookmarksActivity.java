@@ -156,7 +156,7 @@ public class BookmarksActivity extends AppCompatActivity {
 
     private void updateBookmarks() {
         try {
-            Utility.saveList(getApplicationContext(), "bookmarks", currentBookmarks);
+            Utility.saveList(getApplicationContext(), KeySettings.BOOKMARKS_KEY, currentBookmarks);
         } catch (IOException e) {
             e.printStackTrace();
         }
