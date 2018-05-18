@@ -35,6 +35,8 @@ public class ArticleFragment extends Fragment {
     private Article currentArticle;
     private String headline, description, urlImage, sourceUrlImage;
     private boolean aBookmark;
+    private ImageView bookmarkButton;
+
 
     // FINAL VARIABLES
     private static final String URL_BLACK_IMAGE = "https://vignette.wikia.nocookie.net/joke-battles/images/5/5a/Black.jpg/revision/latest?cb=20161223050425";
@@ -120,7 +122,7 @@ public class ArticleFragment extends Fragment {
 
 
         // Set Buttons
-        final ImageButton bookmarkButton = view.findViewById(R.id.imageButton_bookmarkArticle);
+        bookmarkButton = view.findViewById(R.id.imageButton_bookmarkArticle);
         ImageButton shareButton = view.findViewById(R.id.imageButton_shareArticle);
 
         if (aBookmark) { bookmarkButton.setImageResource(R.drawable.ic_bookmark_black_24dp); }
@@ -190,5 +192,12 @@ public class ArticleFragment extends Fragment {
         startActivity(browserIntent);
     }
 
+    public void updateBookmarkButton() {
+        if (currentArticle != null) { aBookmark = ((MainActivity) getActivity()).ifBookmarkExists(currentArticle); }
 
+        if (bookmarkButton != null) {
+            if (aBookmark) { bookmarkButton.setImageResource(R.drawable.ic_bookmark_black_24dp); }
+            else { bookmarkButton.setImageResource(R.drawable.ic_bookmark_border_black_24dp); }
+        }
+    }
 }

@@ -61,7 +61,6 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:text="Language"
         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
         android:textStyle="bold"
@@ -69,8 +68,8 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline_settingsRight"
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="@+id/guideline_settingsLeft"
-        app:layout_constraintTop_toBottomOf="@+id/textView_settings"
-        app:layout_constraintVertical_bias="0.050000012" />
+        app:layout_constraintTop_toTopOf="@id/barrier_settings"
+        app:layout_constraintVertical_bias="0.00999999" />
 
     <TextView
         android:id="@+id/textView_country"
@@ -79,7 +78,6 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:text="Country"
         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
         android:textStyle="bold"
@@ -87,7 +85,8 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline_settingsRight"
         app:layout_constraintHorizontal_bias="0.09"
         app:layout_constraintStart_toStartOf="@+id/guideline_settingsLeft"
-        app:layout_constraintTop_toBottomOf="@+id/textView_settings" />
+        app:layout_constraintTop_toTopOf="@id/barrier_settings"
+        app:layout_constraintVertical_bias="0.44" />
 
     <RadioGroup
         android:id="@+id/radioGroup_countrySettings"
@@ -211,7 +210,7 @@
         app:layout_constraintStart_toEndOf="@+id/radioGroup_countrySettings"
         app:layout_constraintTop_toTopOf="@+id/guideline_settingsTop"
         app:layout_constraintVertical_bias="0.94"
-        app:srcCompat="@drawable/ic_thumb_up_black_24dp" />
+        app:srcCompat="@drawable/ic_check_black_24dp" />
 
     <TextView
         android:id="@+id/textView_newsAPIacknowledgement"
@@ -228,5 +227,48 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline_settingsRight"
         app:layout_constraintStart_toStartOf="@+id/guideline_settingsLeft"
         app:layout_constraintTop_toTopOf="@+id/guideline_settingsBottom" />
+
+    <TextView
+        android:id="@+id/textView_defaultTopic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Default Topic:"
+        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_settingsBottom"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_settingsRight"
+        app:layout_constraintHorizontal_bias="0.11"
+        app:layout_constraintStart_toStartOf="@+id/guideline_settingsLeft"
+        app:layout_constraintTop_toTopOf="@+id/guideline_settingsTop"
+        app:layout_constraintVertical_bias="0.13999999" />
+
+    <EditText
+        android:id="@+id/editText_defaultTopic"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="Topic Name"
+        android:inputType="textPersonName"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_defaultTopic"
+        app:layout_constraintDimensionRatio="w,4.8:1"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_settingsRight"
+        app:layout_constraintStart_toEndOf="@+id/textView_defaultTopic"
+        app:layout_constraintTop_toTopOf="@+id/textView_defaultTopic"
+        app:layout_constraintVertical_bias="0.7" />
+
+    <android.support.constraint.Barrier
+        android:id="@+id/barrier_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="textView_defaultTopic"
+        tools:layout_editor_absoluteY="567dp" />
 
 </android.support.constraint.ConstraintLayout>

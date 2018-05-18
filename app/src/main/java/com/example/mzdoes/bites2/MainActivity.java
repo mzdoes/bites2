@@ -123,7 +123,15 @@ public class MainActivity extends AppCompatActivity {
     private void setup() {
         //SET INSTANCE/API VARIABLES
         searchedArticles = bookmarks = new ArrayList<>();
-        sources = new ArrayList<>(); currentTopic = "trump";
+        sources = new ArrayList<>();
+        currentTopic = "all";
+        try {
+            currentTopic = Utility.readString(getApplicationContext(), KeySettings.DEFAULT_TOPIC_KEY);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         updateInstances();
 
 
@@ -279,7 +287,6 @@ public class MainActivity extends AppCompatActivity {
     private void setArticleView() { setSources(currentLanguage, currentCountry); }
 
     private void updateInstances() {
-        currentLanguage = currentCountry = "";
         try {
             bookmarks = Utility.readList(getApplicationContext(), KeySettings.BOOKMARKS_KEY);
             currentLanguage = Utility.readString(getApplicationContext(), KeySettings.LANGUAGE_KEY);
@@ -366,6 +373,15 @@ public class MainActivity extends AppCompatActivity {
         public int getCount() {
             return searchedArticles.size();
         }
+
+
+        @Override
+        public int getItemPosition(Object object) {
+
+            if (object != null) { ((ArticleFragment) this.getItem(mPager.getCurrentItem())).updateBookmarkButton(); }
+
+            return super.getItemPosition(object);
+        }
     }
 
     @Override
@@ -384,7 +400,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateInstances();
-
     }
 
     @Override

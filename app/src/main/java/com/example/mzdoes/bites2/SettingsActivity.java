@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -19,9 +20,10 @@ public class SettingsActivity extends AppCompatActivity {
     // ANDROID WIDGETS
     private RadioGroup           languageSettings, countrySettings;
     private FloatingActionButton settingsApplyButton;
+    private EditText             topicEditText;
 
     // INSTANCE VARIABLES
-    private String               chosenLanguage, chosenCountry;
+    private String               chosenLanguage, chosenCountry, chosenTopic;
 
 
     /** ---  METHODS AND STUFF  ---- **/
@@ -64,12 +66,17 @@ public class SettingsActivity extends AppCompatActivity {
         else if (chosenCountry.equals("us")) { RadioButton b = findViewById(R.id.radioButton_countryUS); b.setChecked(true); }
 
 
+        topicEditText.setText(chosenTopic);
+
         settingsApplyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                chosenTopic = topicEditText.getText().toString();
+
                 try {
                     Utility.saveString(getApplicationContext(), KeySettings.LANGUAGE_KEY, chosenLanguage);
                     Utility.saveString(getApplicationContext(), KeySettings.COUNTRY_KEY, chosenCountry);
+                    Utility.saveString(getApplicationContext(), KeySettings.DEFAULT_TOPIC_KEY, chosenTopic);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -90,10 +97,11 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        chosenLanguage = chosenCountry = "";
+        chosenLanguage = chosenCountry = chosenTopic = "";
         try {
             chosenLanguage = Utility.readString(getApplicationContext(), KeySettings.LANGUAGE_KEY);
             chosenCountry = Utility.readString(getApplicationContext(), KeySettings.COUNTRY_KEY);
+            chosenTopic = Utility.readString(getApplicationContext(), KeySettings.DEFAULT_TOPIC_KEY);
         } catch  (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -102,6 +110,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         languageSettings = findViewById(R.id.radioGroup_languageSettings);
         countrySettings = findViewById(R.id.radioGroup_countrySettings);
+        topicEditText = findViewById(R.id.editText_defaultTopic);
         settingsApplyButton = findViewById(R.id.floatingActionButton_settingsApply);
 
         setWidgets();

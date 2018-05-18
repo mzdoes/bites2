@@ -120,4 +120,12 @@ public class Article implements Parcelable, Serializable {
                 ", title='" + title + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Article) {
+            if (((Article) obj).getUrl().equals(this.url)) {return true;}
+            else {return false;}
+        } else { return false; }
+    }
 }
