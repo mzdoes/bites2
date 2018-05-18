@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -60,6 +61,18 @@ public class BookmarkFragment extends Fragment {
         // Set other widgets
         headlineView.setText(headline); descriptionView.setText(description);
         view.setBackgroundColor((int) android.R.color.background_dark);
+        ImageButton shareButton = view.findViewById(R.id.imageButton_shareBookmark);
+
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "Check this article out: " + currentArticle.getTitle() + " | " + currentArticle.getUrl());
+                shareIntent.setType("text/plain"); startActivity(shareIntent);
+            }
+        });
+
 
         // View.onClick or swipe up to open article in a browser
         view.setOnClickListener(new View.OnClickListener() {
