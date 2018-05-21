@@ -1,5 +1,6 @@
 package com.example.mzdoes.bites2;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -106,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
                     searchedArticles.clear(); searchedArticles.addAll(articleListResponse);
 
                     updateWidgets();
-
                 }
             }
 
@@ -126,9 +127,7 @@ public class MainActivity extends AppCompatActivity {
         currentTopic = "all";
         try {
             currentTopic = Utility.readString(getApplicationContext(), KeySettings.DEFAULT_TOPIC_KEY);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         updateInstances();
@@ -232,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 currentTopic = searchEditText.getText().toString();
                                 articleRefreshState = 0;
+                                mPager.setCurrentItem(0);
                                 setArticleView();
                             }
                         });
@@ -290,23 +290,27 @@ public class MainActivity extends AppCompatActivity {
             bookmarks = Utility.readList(getApplicationContext(), KeySettings.BOOKMARKS_KEY);
             currentLanguage = Utility.readString(getApplicationContext(), KeySettings.LANGUAGE_KEY);
             currentCountry = Utility.readString(getApplicationContext(), KeySettings.COUNTRY_KEY);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void updateWidgets() {
         mPagerAdapter.notifyDataSetChanged();
         if (articleRefreshState == 0) { mPager.setCurrentItem(0); }
 
-
         int size = searchedArticles.size();
         String bitesText = size + "";
         String topicHolder; if (currentTopic.equals("all")) { topicHolder = "headlines"; } else { topicHolder = currentTopic; }
-        if (size > 1) {bitesText += " bites about '" + topicHolder + "'";}
-        else {bitesText += " bite about '" + topicHolder + "'";}
+        if (size > 1) {bitesText += " bites about '" + topicHolder + "'"; mPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) { return false; }
+        });}
+        else {bitesText += " bite about '" + topicHolder + "'"; mPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) { return true; }
+        });}
         totalBites.setText(bitesText);
 
 
@@ -363,6 +367,8 @@ public class MainActivity extends AppCompatActivity {
             super(fm);
         }
 
+
+
         @Override
         public Fragment getItem(int position) {
             return ArticleFragment.newInstance(searchedArticles.get(position));
@@ -376,9 +382,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getItemPosition(Object object) {
-
-            if (object != null) { ((ArticleFragment) this.getItem(mPager.getCurrentItem())).updateBookmarkButton(); }
-
+            ((ArticleFragment) this.getItem(mPager.getCurrentItem())).updateBookmarkButton();
             return super.getItemPosition(object);
         }
     }
@@ -388,8 +392,8 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         try {
             Utility.saveList(this.getApplicationContext(), KeySettings.BOOKMARKS_KEY, bookmarks);
-            Utility.saveString(this.getApplicationContext(), "languageSetting", currentLanguage);
-            Utility.saveString(this.getApplicationContext(), "countrySetting", currentCountry);
+            Utility.saveString(this.getApplicationContext(), KeySettings.LANGUAGE_KEY, currentLanguage);
+            Utility.saveString(this.getApplicationContext(), KeySettings.COUNTRY_KEY, currentCountry);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -407,10 +411,8 @@ public class MainActivity extends AppCompatActivity {
             //clear the local bookmark list and resume with saved bookmarks
             bookmarks.clear();
             try {
-                bookmarks = Utility.readList(getApplicationContext(), "bookmarks");
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+                bookmarks = Utility.readList(getApplicationContext(), KeySettings.BOOKMARKS_KEY);
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         } else if (resultCode == RESULT_FIRST_USER && requestCode == BOOKMARKS_REQUEST) {

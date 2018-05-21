@@ -2,16 +2,12 @@ package com.example.mzdoes.bites2;
 
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -91,35 +87,6 @@ public class ArticleFragment extends Fragment {
                 return true;
             }
         });
-
-        // HeadlineView OnLongClick to Bookmark
-        headlineView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                final AlertDialog confirmBookmarkDialog = new AlertDialog.Builder(getContext()).create();
-                confirmBookmarkDialog.setTitle("Bookmark this article?");
-
-                confirmBookmarkDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                ((MainActivity) getActivity()).bookmarkArticle(currentArticle);
-                            }
-                        });
-                confirmBookmarkDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                confirmBookmarkDialog.dismiss();
-                            }
-                        });
-
-                confirmBookmarkDialog.show();
-
-                return false;
-            }
-        });
-
 
         // Set Buttons
         bookmarkButton = view.findViewById(R.id.imageButton_bookmarkArticle);
