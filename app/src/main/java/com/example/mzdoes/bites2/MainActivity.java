@@ -383,7 +383,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getItemPosition(Object object) {
             ((ArticleFragment) this.getItem(mPager.getCurrentItem())).updateBookmarkButton();
-            return super.getItemPosition(object);
+            return POSITION_NONE;
         }
     }
 

@@ -1,18 +1,17 @@
 package com.example.mzdoes.bites2;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -28,6 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     /** ---  METHODS AND STUFF  ---- **/
     // APP WIDGETS AND TOOLS METHODS
+    @SuppressLint("ClickableViewAccessibility")
     private void setWidgets() {
         languageSettings.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -67,6 +67,14 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         topicEditText.setText(chosenTopic);
+        topicEditText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                view.setFocusable(true);
+                view.setFocusableInTouchMode(true);
+                return false;
+            }
+        });
 
         settingsApplyButton.setOnClickListener(new View.OnClickListener() {
             @Override
