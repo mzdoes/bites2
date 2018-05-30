@@ -13,7 +13,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -303,14 +302,8 @@ public class MainActivity extends AppCompatActivity {
         int size = searchedArticles.size();
         String bitesText = size + "";
         String topicHolder; if (currentTopic.equals("all")) { topicHolder = "headlines"; } else { topicHolder = currentTopic; }
-        if (size > 1) {bitesText += " bites about '" + topicHolder + "'"; mPager.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) { return false; }
-        });}
-        else {bitesText += " bite about '" + topicHolder + "'"; mPager.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) { return true; }
-        });}
+        if (size > 1) {bitesText += " bites about '" + topicHolder + "'"; }
+        else { bitesText += " bite about '" + topicHolder + "'"; }
         totalBites.setText(bitesText);
 
 

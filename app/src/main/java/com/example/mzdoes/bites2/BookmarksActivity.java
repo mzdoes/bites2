@@ -1,6 +1,5 @@
 package com.example.mzdoes.bites2;
 
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -136,7 +134,6 @@ public class BookmarksActivity extends AppCompatActivity {
         });
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private void updateWidgets(int pos) {
         mPagerAdapter.notifyDataSetChanged();
         if (pos == 0) { mPager.setCurrentItem(pos + 1);}
@@ -144,10 +141,6 @@ public class BookmarksActivity extends AppCompatActivity {
         int size = currentBookmarks.size();
         String totalString = size + " total bookmark";
         if (size > 1) {totalString += "s";}
-        else { mPager.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) { return true; }
-        }); }
         totalBookmarksView.setText(totalString);
     }
 
@@ -193,6 +186,9 @@ public class BookmarksActivity extends AppCompatActivity {
         public int getCount() {
             return currentBookmarks.size();
         }
+
+        @Override
+        public int getItemPosition(Object object) { return POSITION_NONE; }
     }
 
     @Override
